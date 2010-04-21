@@ -114,17 +114,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       builds for an incremental package. This option is only meaningful when
       -i is specified.
 
-  --payload_signer <signer>
-      Specify the signer when signing the payload and metadata for A/B OTAs.
-      By default (i.e. without this flag), it calls 'openssl pkeyutl' to sign
-      with the package private key. If the private key cannot be accessed
-      directly, a payload signer that knows how to do that should be specified.
-      The signer will be supplied with "-inkey <path_to_key>",
-      "-in <input_file>" and "-out <output_file>" parameters.
-
-  --payload_signer_args <args>
-      Specify the arguments needed for payload signer.
-
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
@@ -176,6 +165,7 @@ OPTIONS.cache_size = None
 OPTIONS.stash_threshold = 0.8
 OPTIONS.gen_verify = False
 OPTIONS.log_diff = None
+OPTIONS.override_device = 'auto'
 OPTIONS.backuptool = True
 
 def MostPopularKey(d, default):
@@ -1985,10 +1975,6 @@ def main(argv):
       OPTIONS.gen_verify = True
     elif o == "--log_diff":
       OPTIONS.log_diff = a
-    elif o == "--payload_signer":
-      OPTIONS.payload_signer = a
-    elif o == "--payload_signer_args":
-      OPTIONS.payload_signer_args = shlex.split(a)
     elif o in ("--override_device"):
       OPTIONS.override_device = a
     else:
@@ -2020,8 +2006,6 @@ def main(argv):
                                  "stash_threshold=",
                                  "gen_verify",
                                  "log_diff=",
-                                 "payload_signer=",
-                                 "payload_signer_args=",
                                  "override_device="
                              ], extra_option_handler=option_handler)
 
