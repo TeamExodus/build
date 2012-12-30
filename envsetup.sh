@@ -1561,6 +1561,7 @@ function godir () {
     \cd $T/$pathname
 }
 
+<<<<<<< HEAD
 function cmremote()
 {
     git remote rm cmremote 2> /dev/null
@@ -2002,15 +2003,27 @@ function cmrebase() {
 }
 
 function mka() {
+retval=0
     case `uname -s` in
         Darwin)
-            make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            local threads=`sysctl hw.ncpu|cut -d" " -f2`
+            local load=`expr $threads \* 2`
+            make -j -l $load "$@"
+            retval=$?
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            local threads=`grep "^processor" /proc/cpuinfo | wc -l`
+            local load=`expr $threads \* 2`
+            schedtool -B -n 1 -e ionice -n 1 make -j -l $load "$@"
+            retval=$?
             ;;
     esac
-}
+if [ $retval -eq 0 ]; then
+    bash -c 'j=0; while [ $j -lt 10 ]; do j=`expr $j + 1`; notify-send "VANIR" "'$TARGET_PRODUCT' build completed." -i '$(gettop)/build/buildwin.png' -t 2000; sleep 1; done' &
+else
+    bash -c 'j=0; while [ $j -lt 20 ]; do j=`expr $j + 1`; notify-send "VANIR" "'$TARGET_PRODUCT' build FAILED." -i '$(gettop)/build/buildfailed.png' -t 1000; sleep 1; done' &
+fi
+return $retval
 
 function reposync() {
     case `uname -s` in
