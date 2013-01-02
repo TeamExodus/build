@@ -26,6 +26,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - repopick: Utility to fetch changes from Gerrit.
 - installboot: Installs a boot.img to the connected device.
 - installrecovery: Installs a recovery.img to the connected device.
+- smash:    clean out the out directory of your lunched target only.
 
 Look at the source to view more functions. The complete list is:
 EOF
@@ -1782,6 +1783,31 @@ else
     bash -c 'j=0; while [ $j -lt 20 ]; do j=`expr $j + 1`; notify-send "VANIR" "'$TARGET_PRODUCT' build FAILED." -i '$(gettop)/build/buildfailed.png' -t 1000; sleep 1; done' &
 fi
 return $retval
+
+smash() {
+#to do: add smash $anytarget, smashOTA, smash, smashVANIR
+DIR=$OUT
+#to do: fix the colors
+	if [ -d  "$DIR" ]; then
+	echo ""
+	echo $CL_RED" Removing" $CL_RST" $TARGET_PRODUCT out directory:"
+	echo " Location:"
+	echo " $OUT"
+	rm -R -f $OUT
+	echo "  ."
+	echo "  ."
+	echo "  ."
+	echo "  ."
+	echo "  ."
+	echo $CL_RST" Destroyed."
+	echo ""
+	return;
+	else 
+	echo ""
+	echo $CL_YLW" Already" $CL_RED" SMASHED it !!!" $CL_RST
+	echo ""
+	fi
+}
 
 function reposync() {
     case `uname -s` in
