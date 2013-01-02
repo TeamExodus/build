@@ -1,0 +1,94 @@
+remember: links to tutorials are located in the readme in /manifest
+
+build command list:
+
+- hmm:       printscreen of build commands
+- lunch:     lunch <product_name>-<build_variant>
+- tapas:     tapas [<App1> <App2> ...] [arm|x86|mips] [eng|userdebug|user]
+- croot:     Changes directory to the top of the tree.
+- m:         Makes from the top of the tree.
+- mm:        Builds all of the modules in the current directory.
+- mmm:       Builds all of the modules in the supplied directories.
+- cgrep:     Greps on all local C/C++ files.
+- jgrep:     Greps on all local Java files.
+- resgrep:   Greps on all local res/*.xml files.
+- godir:     Go to the directory containing a file.
+- mka:       Builds using SCHED_BATCH on all processors
+- mka bacon: Primary build command.  builds ota and runs squisher/optimizations using SCHED_BATCH on all processors (-j8).
+- mkaflash:  Same as mka in the top of the tree with the addition of flashing the rom, gapps, and addon zips.
+- mkapush:   Same as mka with the addition of adb pushing to the device.
+- reposync:  Parallel repo sync using ionice and SCHED_BATCH
+- make:      builds OTA, does not run squisher
+
+
+Steps to build:
+
+From source root:
+. build/envsetup.sh && lunch
+choose the number of the target device
+mka bacon -j8
+
+How to to clean your out directory/cache:
+
+ccache -c -C  ==  clean all your ccache out
+make clean    ==  remove out directory
+make clobber  ==  remove out directory
+smash         ==  removes out directory for the build you are lunched on only
+
+Look at the source to view more functions. 
+The complete list is:
+addcompletions 
+add_lunch_combo 
+cgrep 
+check_product 
+check_variant 
+choosecombo 
+chooseproduct 
+choosetype 
+choosevariant 
+cproj 
+croot 
+findmakefile 
+gdbclient 
+get_abs_build_var 
+getbugreports 
+get_build_var 
+getlastscreenshot 
+getprebuilt 
+getscreenshotpath 
+getsdcardpath 
+gettargetarch 
+gettop 
+godir 
+hmm 
+isviewserverstarted 
+jgrep 
+key_back 
+key_home 
+key_menu 
+linaroinit 
+lunch 
+_lunch 
+m 
+mka 
+mkapush 
+mm 
+mmm 
+pid 
+printconfig 
+print_lunch_menu 
+reposync 
+resgrep 
+runhat 
+runtest 
+set_java_home 
+setpaths 
+set_sequence_number 
+set_stuff_for_environment 
+settitle 
+smoketest 
+startviewserver 
+stopviewserver 
+systemstack 
+tapas 
+tracedmdump
