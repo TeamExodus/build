@@ -2088,18 +2088,12 @@ do
 done
 unset f
 
-# Add completions
-check_bash_version && {
-    dirs="sdk/bash_completion vendor/cm/bash_completion"
-    for dir in $dirs; do
-    if [ -d ${dir} ]; then
-        for f in `/bin/ls ${dir}/[a-z]*.bash 2> /dev/null`; do
-            echo "including $f"
-            . $f
-        done
-    fi
-    done
-}
+addcompletions
 
-export ANDROID_BUILD_TOP=$(gettop)
-export PATH=$PATH:$ANDROID_BUILD_TOP/vendor/vanir/scripts
+#branch on PS1, rst (repo start helper), rup (repo upload helper)
+source $(gettop)/build/nukehawtness
+
+#allow tab completion of git commands and branch names
+if [ `typeset -F | grep _git | wc -l` -eq 0 ]; then
+    source $(gettop)/build/git-completion.bash
+fi

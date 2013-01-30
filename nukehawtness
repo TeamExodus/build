@@ -1,0 +1,54 @@
+#!/bin/bash
+### SUPER GIT BRANCH THING ON BASH PROMPT
+if [ `echo $PS1 | grep parse_git_branch | wc -l` -eq 0 ]; then
+    export PS1=`echo "$PS1" | sed 's/\$[ ]*$//g'`
+    istheregit=$(which git)
+    if [ -x "$istheregit" ]; then
+        source git-completion.bash
+        # Git prompt. Based on  http://henrik.nyh.se/2008/12/git-dirty-prompt
+        parse_git_dirty() {
+         [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "\ \*"
+        }
+        parse_git_branch() {     
+         git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty))/"
+        }
+       export PS1="$PS1\$(parse_git_branch)$ "
+    else
+       export PS1="$PS1$ "
+    fi
+fi
+
+### SEXY REPO START HELPER (assumes you are starting a branch on the project you're in if you ommit that argument)
+rst()
+{
+if [ $# -eq 1 ]; then
+    currpath=`pwd`
+    pushd . &> /dev/null 
+    while [ 1 ]; do
+        if [ -d .repo ] || [ `pwd` = / ]; then break; fi
+        cd ..
+    done
+    [ `pwd` = / ] && return 1
+    saferepopath=`pwd | sed 's/\//\\\\\//g'`
+    currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
+    repo start $1 $currpath
+    popd &> /dev/null
+else
+    repo start $1 $*
+fi
+}
+
+### SEXY REPO UPLOAD HELPER!
+rup()
+{
+if [ $# -eq 0 ]; then
+    currpath=`pwd`
+    pushd . &> /dev/null
+    saferepopath=`pwd | sed 's/\//\\\\\//g'`
+    currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
+    repo upload $currpath
+    popd &> /dev/null
+else
+    repo upload $*
+fi
+}
