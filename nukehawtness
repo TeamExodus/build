@@ -22,8 +22,13 @@ fi
 rst()
 {
 if [ $# -eq 1 ]; then
-    currpath=`pwd`
     pushd . &> /dev/null 
+    while [ 1 ]; do
+        if [ -d .git ] || [ `pwd` = / ]; then break; fi
+        cd ..
+    done
+    [ `pwd` = / ] && return 1
+    currpath=`pwd`
     while [ 1 ]; do
         if [ -d .repo ] || [ `pwd` = / ]; then break; fi
         cd ..
@@ -42,8 +47,18 @@ fi
 rup()
 {
 if [ $# -eq 0 ]; then
+    pushd . &> /dev/null 
+    while [ 1 ]; do
+        if [ -d .git ] || [ `pwd` = / ]; then break; fi
+        cd ..
+    done
+    [ `pwd` = / ] && return 1
     currpath=`pwd`
-    pushd . &> /dev/null
+    while [ 1 ]; do
+        if [ -d .repo ] || [ `pwd` = / ]; then break; fi
+        cd ..
+    done
+    [ `pwd` = / ] && return 1
     saferepopath=`pwd | sed 's/\//\\\\\//g'`
     currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
     repo upload $currpath
