@@ -2090,8 +2090,29 @@ unset f
 
 addcompletions
 
-#branch on PS1, rst (repo start helper), rup (repo upload helper)
+#rst (repo start helper), rup (repo upload helper)
 source $(gettop)/build/nukehawtness
+
+parse_git_dirty() {
+ [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo " \*"
+}
+parse_git_branch() {     
+ [ "$(parse_git_dirty)" = "" ] && echo -en "\033[1;32m" || echo -en "\033[1;31m"
+ git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty))/"
+}
+if [ ! $GITPS1ENGAGED ]; then
+export GITPS1ENGAGED=1
+export PS1=`echo "$PS1" | sed 's/\[\$ \]*//g'`
+istheregit=$(which git)
+if [ `echo $PS1 | grep parse_git_branch | wc -l` -eq 0 ]; then
+  if [ -x "$istheregit" ]; then
+      export PS1="${NONE}$PS1$(parse_git_branch)${NONE}"
+  else
+      export PS1="$PS1$ "
+  fi
+  export PS1=`echo "$PS1" | sed 's/$[ ]*$//g'`"\n${NONE}\$ "
+fi
+fi
 
 #allow tab completion of git commands and branch names
 if [ `typeset -F | grep _git | wc -l` -eq 0 ]; then
