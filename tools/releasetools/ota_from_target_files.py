@@ -176,9 +176,6 @@ OPTIONS.cache_size = None
 OPTIONS.stash_threshold = 0.8
 OPTIONS.gen_verify = False
 OPTIONS.log_diff = None
-OPTIONS.payload_signer = None
-OPTIONS.payload_signer_args = []
-OPTIONS.override_device = 'auto'
 OPTIONS.backuptool = True
 
 def MostPopularKey(d, default):
