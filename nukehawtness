@@ -1,4 +1,14 @@
 #!/bin/bash
+
+### Calls repo start but restores working directory to original state afterwards (rather than leaving the dev branch at the manifest head)
+smartstart()
+{
+    oldhead=`git rev-parse HEAD 2>/dev/null`
+    doit() { repo start $*; git reset --hard $oldhead; }
+    git stash save | grep 'No local changes to save' && doit $* || (doit $* && git stash pop)
+    return $?
+}
+
 ### SEXY REPO START HELPER (assumes you are starting a branch on the project you're in if you omit that argument)
 rst()
 {
@@ -16,13 +26,13 @@ if [ $# -eq 1 ]; then
     done
     [ `pwd` = / ] && return 1
     saferepopath=`pwd | sed 's/\//\\\\\//g'`
-    currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
-    repo start $1 $currpath
     popd &> /dev/null
+    currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
+    smartstart $1 $currpath
 else
     branchname=$1
     shift
-    repo start $branchname $*
+    smartstart $branchname $*
     cd $1
 fi
 }
