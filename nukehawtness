@@ -9,17 +9,21 @@ smartstart()
     return $?
 }
 
-### SEXY REPO START HELPER (assumes you are starting a branch on the project you're in if you omit that argument)
+resolve()
+{
+    output=""
+    for x in $*; do
+      output="$output `repo list | grep $x | cut -d ':' -f 2`"
+    done
+    echo $output
+}
+
+### SEXY REPO START HELPER (assumes you are starting a branch on the project you're in if you ommit that argument)
 rst()
 {
 if [ $# -eq 1 ]; then
-    pushd . &> /dev/null 
-    while [ 1 ]; do
-        if [ -d .git ] || [ `pwd` = / ]; then break; fi
-        cd ..
-    done
-    [ `pwd` = / ] && return 1
     currpath=`pwd`
+    pushd . &> /dev/null 
     while [ 1 ]; do
         if [ -d .repo ] || [ `pwd` = / ]; then break; fi
         cd ..
@@ -28,11 +32,11 @@ if [ $# -eq 1 ]; then
     saferepopath=`pwd | sed 's/\//\\\\\//g'`
     popd &> /dev/null
     currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
-    smartstart $1 $currpath
+    smartstart $1 `resolve $currpath`
 else
     branchname=$1
     shift
-    smartstart $branchname $*
+    repo $branchname `resolve $*`
     cd $1
 fi
 }
@@ -41,13 +45,8 @@ fi
 rup()
 {
 if [ $# -eq 0 ]; then
-    pushd . &> /dev/null 
-    while [ 1 ]; do
-        if [ -d .git ] || [ `pwd` = / ]; then break; fi
-        cd ..
-    done
-    [ `pwd` = / ] && return 1
     currpath=`pwd`
+    pushd . &> /dev/null 
     while [ 1 ]; do
         if [ -d .repo ] || [ `pwd` = / ]; then break; fi
         cd ..
@@ -55,9 +54,9 @@ if [ $# -eq 0 ]; then
     [ `pwd` = / ] && return 1
     saferepopath=`pwd | sed 's/\//\\\\\//g'`
     currpath=`echo $currpath | sed "s/$saferepopath//g" | sed 's/^\///g'`
-    repo upload $currpath
+    repo upload `resolve $currpath`
     popd &> /dev/null
 else
-    repo upload $*
+    repo upload `resolve $*`
 fi
 }
