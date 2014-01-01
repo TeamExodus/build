@@ -9,11 +9,15 @@ smartstart()
     return $?
 }
 
+
 resolve()
 {
     output=""
     for x in $*; do
-      output="$output `repo list | grep $x | cut -d ':' -f 2`"
+      while [ `repo list | egrep -c "$x :"` -eq 0 ] && [ ! "$x" = "" ] ; do
+        x=`dirname $x`
+      done
+      output="$output `repo list | egrep "$x :" | cut -d ':' -f 2`"
     done
     echo $output
 }
