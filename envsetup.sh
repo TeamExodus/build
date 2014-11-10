@@ -38,6 +38,20 @@ EOF
     echo $A
 }
 
+run a command inside all projects tracked on the vanir remote in the manifest
+function forall_vanir()
+{
+  cd $ANDROID_BUILD_TOP
+  pathlist=""
+  set -f
+  for x in `cat $ANDROID_BUILD_TOP/.repo/manifest.xml | sed 's/<!--.*-->//g' | grep "<project" | sed 's/.*project //g' | grep 'remote="vanir"' | sed 's/[ ]*\/*>//g' | sed 's/groups=["a-zA-Z0-9,\-]*//g' | sed 's/.*path=\"//g' | sed 's/".*//g'`; do
+    pathlist="$pathlist $x"
+  done
+  set +f
+  [ ! "$pathlist" ] && echo "FAIL" && return 1
+  repo forall -r $pathlist -c "$@"
+}
+
 # Get the value of a build variable as an absolute path.
 function get_abs_build_var()
 {
