@@ -617,15 +617,17 @@ function lunch()
     check_product $product
     if [ $? -ne 0 ]
     then
-        # if we can't find a product, try to grab it off the CM github
+        # if we can't find a kernel, try to grab it off the CM github
         T=$(gettop)
-        pushd $T > /dev/null
-        build/tools/roomservice.py $product
-        popd > /dev/null
-        check_product $product
-    else
-        build/tools/roomservice.py $product true
+        if [ $T ]; then
+            pushd . >& /dev/null
+            cd $T
+            source build/tools/bottleservice.sh
+            champagne $product || return 1
+            popd >& /dev/null
+        fi
     fi
+
     if [ $? -ne 0 ]
     then
         echo
