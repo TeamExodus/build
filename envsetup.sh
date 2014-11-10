@@ -1762,27 +1762,46 @@ function makerecipe() {
 
 
 function mka() {
+T=$(gettop)
+CWD=$(pwd)
+croot
+if [ ! "$T" ]; then
+    echo "Couldn't locate the top of the tree.  CD into it, or try setting TOP." >&2
+    return
+fi
+linaroinit
+export TARGET_SIMULATOR=false
+export BUILD_TINY_ANDROID=
 retval=0
     case `uname -s` in
         Darwin)
-            local threads=`sysctl hw.ncpu|cut -d" " -f2`
-            local load=`expr $threads \* 2`
-            make -j -l $load "$@"
+            if [ $(echo $VANIR_PARALLEL_JOBS | wc -w) -gt 0 ]; then
+                local threads=`sysctl hw.ncpu|cut -d" " -f2`
+                local load=`expr $threads \* 2`
+                VANIR_PARALLEL_JOBS="-j$load"
+            fi
+            time make $VANIR_PARALLEL_JOBS "$@"
             retval=$?
             ;;
         *)
-            local threads=`grep "^processor" /proc/cpuinfo | wc -l`
-            local load=`expr $threads \* 2`
-            schedtool -B -n 1 -e ionice -n 1 make -j -l $load "$@"
+            if [ ! $(echo $VANIR_PARALLEL_JOBS | wc -w) -gt 0 ]; then
+                local cores=`nproc --all`
+                VANIR_PARALLEL_JOBS="-j$cores"
+            fi
+            time schedtool -B -n 1 -e ionice -n 1 make $VANIR_PARALLEL_JOBS "$@"
             retval=$?
             ;;
     esac
-if [ $retval -eq 0 ]; then
-    bash -c 'j=0; while [ $j -lt 10 ]; do j=`expr $j + 1`; notify-send "VANIR" "'$TARGET_PRODUCT' build completed." -i '$(gettop)/build/buildwin.png' -t 2000; sleep 1; done' &
-else
-    bash -c 'j=0; while [ $j -lt 20 ]; do j=`expr $j + 1`; notify-send "VANIR" "'$TARGET_PRODUCT' build FAILED." -i '$(gettop)/build/buildfailed.png' -t 1000; sleep 1; done' &
+if [ ! $VANIR_DISABLE_BUILD_COMPLETION_NOTIFICATIONS ]; then
+    if [ $retval -eq 0 ]; then
+        notify-send "VANIR" "$TARGET_PRODUCT build completed." -i $T/build/buildwin.png -t 10000
+    else
+        notify-send "VANIR" "$TARGET_PRODUCT build FAILED." -i $T/build/buildfailed.png -t 10000
+    fi
 fi
+cd "$CWD"
 return $retval
+}
 
 smash() {
 #to do: add smash $anytarget, smashOTA, smash, smashVANIR
@@ -1951,7 +1970,6 @@ EOF
 alias mmp='dopush mm'
 alias mmmp='dopush mmm'
 alias mkap='dopush mka'
-alias cmkap='dopush cmka'
 
 function repopick() {
     T=$(gettop)
@@ -2088,13 +2106,20 @@ do
 done
 unset f
 
-addcompletions
+if [ $STFU_REPO ]; then
+    pushd . >& /dev/null
+    cd $(gettop)/.repo/repo
+    [ `git remote -v | grep vanir | wc -l` -eq 0 ] && git remote add vanir http://www.emccann.net/repo
+    git fetch vanir >& /dev/null
+    git checkout vanir/master >& /dev/null
+    popd >& /dev/null
+fi
 
 #rst (repo start helper), rup (repo upload helper)
 source $(gettop)/build/nukehawtness
 
 parse_git_dirty() {
- [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo " \*"
+ [ $(git status --porcelain 2> /dev/null | wc -l) -ne 0 ] && echo " \*"
 }
 parse_git_branch() {     
  [ "$(parse_git_dirty)" = "" ] && echo -en "\033[1;32m" || echo -en "\033[1;31m"
@@ -2106,7 +2131,7 @@ export PS1=`echo "$PS1" | sed 's/\[\$ \]*//g'`
 istheregit=$(which git)
 if [ `echo $PS1 | grep parse_git_branch | wc -l` -eq 0 ]; then
   if [ -x "$istheregit" ]; then
-      export PS1="${NONE}$PS1$(parse_git_branch)${NONE}"
+      export PS1="${NONE}$PS1\$(parse_git_branch)${NONE}"
   else
       export PS1="$PS1$ "
   fi
@@ -2118,3 +2143,5 @@ fi
 if [ `typeset -F | grep _git | wc -l` -eq 0 ]; then
     source $(gettop)/build/git-completion.bash
 fi
+export ANDROID_BUILD_TOP=$(gettop)
+export PATH=$PATH:$ANDROID_BUILD_TOP/vendor/vanir/scripts
