@@ -555,6 +555,34 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
+  script.ShowProgress(0.5, 0)
+
+  #says: VANIR
+  script.Print(" ")
+  script.Print(" ")
+  script.Print(" ")
+  script.Print(" ")
+  script.Print(" ")
+  script.Print(" ")
+  script.Print(" ")
+  script.Print("                L.                            ")
+  script.Print("                EW:        ,ft t   j.         ")
+  script.Print("             .. E##;       t#E Ej  EW,        ")
+  script.Print("t      .DD. ;W, E###t      t#E E#, E##j       ")
+  script.Print("EK:   ,WK. j##, E#fE#f     t#E E#t E###D.     ")
+  script.Print("E#t  i#D  G###, E#t D#G    t#E E#t E#jG#W;    ")
+  script.Print("E#t j#f :E####, E#t  f#E.  t#E E#t E#t t##f   ")
+  script.Print("E#tL#i ;W#DG##, E#t   t#K: t#E E#t E#t  :K#E: ")
+  script.Print("E#WW, j###DW##, E#t    ;#W,t#E E#t E#KDDDD###i")
+  script.Print("E#K: G##i,,G##, E#t     :K#D#E E#t E#f,t#Wi,,,")
+  script.Print("ED.:K#K:   L##, E#t      .E##E E#t E#t  ;#W:  ")
+  script.Print("t ;##D.    L##, ..         G#E E#t DWi   ,KK: ")
+  script.Print("  ,,,      .,,              fE ,;.            ")
+  script.Print("                             ,                ")
+  script.Print("  Vanir - KitKat 4.4 ")
+  script.Print("    by Team Vanir")
+  script.Print(" ")
+
   if OPTIONS.backuptool:
     if block_based:
       common.ZipWriteStr(output_zip, "system/bin/backuptool.sh",
@@ -584,6 +612,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   recovery_mount_options = OPTIONS.info_dict.get("recovery_mount_options")
 
+  script.Print("Installing the ROM...")
   system_items = ItemSet("system", "META/filesystem_config.txt")
   script.ShowProgress(system_progress, 0)
   if block_based:
@@ -638,6 +667,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
       vendor_items.GetMetadata(input_zip)
       vendor_items.Get("vendor").SetPermissions(script)
 
+  script.Print("Installing boot.img...")
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
 
@@ -647,6 +677,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if block_based:
     script.Unmount("/system")
 
+  script.Print("Resurrecting gapps from pre-flash backup")
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
     if block_based:
@@ -663,6 +694,11 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.extra_script is not None:
     script.AppendExtra(OPTIONS.extra_script)
+
+  script.Print(" ")
+  script.Print("CLEAN UP THE BLOOD!")
+  script.Print("YOU SHOULD PROBABLY GET TESTED!");
+  script.Print(" ")
 
   script.UnmountAll()
 
