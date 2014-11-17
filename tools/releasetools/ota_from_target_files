@@ -579,7 +579,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("t ;##D.    L##, ..         G#E E#t DWi   ,KK: ")
   script.Print("  ,,,      .,,              fE ,;.            ")
   script.Print("                             ,                ")
-  script.Print("  Vanir - KitKat 4.4 ")
+  script.Print("  Vanir - KitKat 5.0 ")
   script.Print("    by Team Vanir")
   script.Print(" ")
 
