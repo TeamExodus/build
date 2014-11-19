@@ -615,7 +615,7 @@ function lunch()
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
     check_product $product
-    if [ $? -ne 0 ]
+    if [ $? -eq 0 ]
     then
         # if we can't find a kernel, try to grab it off the CM github
         T=$(gettop)
