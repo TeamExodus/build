@@ -1587,7 +1587,13 @@ $(hide) if [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq ] ; the
     -extdirs "" -d $(PRIVATE_CLASS_INTERMEDIATES_DIR) \
     $(PRIVATE_JAVACFLAGS) \
     \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq \
-    || ( rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR) ; exit 41 ) \
+    2>$(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr \
+    && ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo -e ${CL_YLW}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ) \
+    || ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo -e ${CL_RED}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR); exit 41 ) \
 fi
 $(if $(PRIVATE_JAVA_LAYERS_FILE), $(hide) build/tools/java-layers.py \
     $(PRIVATE_JAVA_LAYERS_FILE) \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq,)
@@ -1648,7 +1654,13 @@ $(hide) if [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq ] ; the
     -extdirs "" -d $(PRIVATE_CLASS_INTERMEDIATES_DIR) \
     $(PRIVATE_JAVACFLAGS) \
     \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq \
-    || ( exit 41 ) \
+    2>$(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr \
+    && ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo -e ${CL_YLW}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ) \
+    || ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo -e ${CL_RED}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/srderr; exit 41 ) \
 fi
 $(hide) rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list
 $(hide) rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq
@@ -1931,19 +1943,19 @@ endef
 
 # Copy a prebuilt file to a target location.
 define transform-prebuilt-to-target
-@echo -e "$(if $(PRIVATE_IS_HOST_MODULE),host,target) "${CL_CYN}"Prebuilt:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_CYN}"$(if $(PRIVATE_IS_HOST_MODULE),host,target) Prebuilt:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(copy-file-to-target)
 endef
 
 # Copy a prebuilt file to a target location, using zipalign on it.
 define transform-prebuilt-to-target-with-zipalign
-@echo "$(if $(PRIVATE_IS_HOST_MODULE),host,target) "${CL_CYN}"Prebuilt APK:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_CYN}"$(if $(PRIVATE_IS_HOST_MODULE),host,target) Prebuilt APK:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(copy-file-to-target-with-zipalign)
 endef
 
 # Copy a prebuilt file to a target location, stripping "# comment" comments.
 define transform-prebuilt-to-target-strip-comments
-@echo "$(if $(PRIVATE_IS_HOST_MODULE),host,target) "${CL_CYN}"Prebuilt:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
+@echo -e ${CL_CYN}"$(if $(PRIVATE_IS_HOST_MODULE),host,target) Prebuilt:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 $(copy-file-to-target-strip-comments)
 endef
 
@@ -1977,8 +1989,9 @@ endif
 ###########################################################
 ## Commands to call Proguard
 ###########################################################
+@echo -e ${CL_CYN}"Copying:"${CL_RST}" $@"
+@echo -e ${CL_GRN}"Proguard:"${CL_RST}" $@"
 define transform-jar-to-proguard
-@echo Proguard: $@
 $(hide) $(PROGUARD) -injars $< -outjars $@ $(PRIVATE_PROGUARD_FLAGS) \
     $(addprefix -injars , $(PRIVATE_EXTRA_INPUT_JAR))
 endef
