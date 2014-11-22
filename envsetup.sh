@@ -2088,4 +2088,4 @@ if [ `typeset -F | grep _git | wc -l` -eq 0 ]; then
     source $(gettop)/build/git-completion.bash
 fi
 export ANDROID_BUILD_TOP=$(gettop)
-export PATH=$PATH:$ANDROID_BUILD_TOP/vendor/vanir/scripts
+export PATH=$ANDROID_BUILD_TOP/ccache:$PATH:$ANDROID_BUILD_TOP/vendor/vanir/scripts
