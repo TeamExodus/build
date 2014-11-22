@@ -2673,3 +2673,4 @@ check_bash_version && {
 }
 
 export ANDROID_BUILD_TOP=$(gettop)
+export PATH=$ANDROID_BUILD_TOP/ccache:$PATH

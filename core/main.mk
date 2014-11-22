@@ -69,6 +69,9 @@ $(DEFAULT_GOAL):
 .PHONY: FORCE
 FORCE:
 
+# check ccache version and build if necessary
+$(info $(shell build/tools/ccache_version_check.sh))
+
 # These goals don't need to collect and include Android.mks/CleanSpec.mks
 # in the source tree.
 dont_bother_goals := clean clobber dataclean installclean \
