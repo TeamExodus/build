@@ -1575,54 +1575,6 @@ function godir () {
     \cd $T/$pathname
 }
 
-function linaroinit()
-{
-    pushd . >& /dev/null
-    cd $(gettop)
-    if [ ! -e .ccache_cleaned_for_gcc48 ]; then
-        if [ `uname -a | grep -i darwin | wc -l` -eq 0 ]; then
-            export PATH=$PATH:`pwd`/prebuilts/misc/linux-x86/ccache/
-        else
-            export PATH=$PATH:`pwd`/prebuilts/misc/darwin-x86/ccache/
-        fi
-        echo "Clearing your ccache in preparation for your first build with GCC 4.8"
-        echo "(preprocessed files from ccache and gcc4.7 aren't compatible with gcc4.8 compilation,"
-        echo "   so your ccache needs to be restarted from scratch)"
-        ccache -C -z && touch .ccache_cleaned_for_gcc48
-    fi
-    if [ ! -e .nukewazhere ]; then
-        rm -rf build-info android-toolchain-eabi android-toolchain-eabi-gcc4.8-turboexperimental .nukesballs .nukesballs48 .usinggcc48
-        touch .nukewazhere
-        UBUNTU=`cat /etc/issue.net | cut -d' ' -f2`
-        HOST_ARCH=`uname -m`
-        echo "HOST_ARCH = ${HOST_ARCH}"
-        if [ ${HOST_ARCH} == "x86_64" ] ; then
-               PKGS='git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev libc6-dev lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc uboot-mkimage openjdk-6-jdk openjdk-6-jre vim-common realpath'
-        else
-               echo "ERROR: Only 64bit Host(Build) machines are supported at the moment."
-               exit 1
-        fi
-
-        PKGS+=' lib32readline-gplv2-dev'
-        echo "If you're not on ubuntu 12.04, this might not work."
-
-        echo "Checking and installing missing dependencies if any .. .."
-        sudo apt-get install ${PKGS}
-
-        MISSING=`dpkg-query -W -f='${Status}\n' ${PKGS} 2>&1 | grep 'No packages found matching' | cut -d' ' -f5`
-        if [ -n "$MISSING" ] ; then
-               echo "Missing required packages:"
-               for m in $MISSING ; do
-                       echo -n "${m%?} "
-               done
-               echo
-               return 1
-        fi
-    fi
-    popd >& /dev/null
-    return 0
-}
-
 function aospremote()
 {
     git remote rm aosp 2> /dev/null
@@ -1771,7 +1723,6 @@ if [ ! "$T" ]; then
     echo "Couldn't locate the top of the tree.  CD into it, or try setting TOP." >&2
     return
 fi
-linaroinit
 export TARGET_SIMULATOR=false
 export BUILD_TINY_ANDROID=
 retval=0
