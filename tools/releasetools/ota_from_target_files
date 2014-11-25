@@ -703,6 +703,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if block_based:
     script.Unmount("/system")
 
+  device_specific.FullOTA_PostValidate()
+
   script.Print("Resurrecting gapps from pre-flash backup")
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
