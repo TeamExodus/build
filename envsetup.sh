@@ -45,7 +45,7 @@ function forall_vanir()
   cd $ANDROID_BUILD_TOP
   pathlist=""
   tmp=`mktemp`
-  repo forall -c '[ "$REPO_REMOTE" = "vanir" ] && echo $REPO_PATH' > $tmp
+  repo forall -c '[ "$REPO_REMOTE" = "vanir" ] && echo ^$REPO_PATH\$' > $tmp
   repo forall -r `cat $tmp` -c "$@"
   rm $tmp
 }
