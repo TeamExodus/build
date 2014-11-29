@@ -219,8 +219,8 @@ class EdifyGenerator(object):
           if "=" in option:
             key, value = option.split("=", 1)
             mount_dict[key] = value
-      self.script.append('mount("%s", "%s", "%s", "%s", "%s");' %
-                         (p.fs_type, common.PARTITION_TYPES[p.fs_type],
+      self.script.append('ifelse(is_mounted("%s") == "%s",ui_print("%s is already mounted."),mount("%s", "%s", "%s", "%s", "%s"));' %
+                         (p.mount_point, p.mount_point, p.mount_point, p.fs_type, common.PARTITION_TYPES[p.fs_type],
                           p.device, p.mount_point, mount_dict.get(p.fs_type, "")))
       self.mounts.add(p.mount_point)
 
