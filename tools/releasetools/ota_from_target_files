@@ -597,6 +597,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("    by Team Vanir")
   script.Print(" ")
 
+  script.SmartUnmount("/system")
+
   if OPTIONS.backuptool:
     if block_based:
       common.ZipWriteStr(output_zip, "system/bin/backuptool.sh",
