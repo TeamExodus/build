@@ -608,19 +608,6 @@ function lunch()
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
     check_product $product
-    if [ $? -eq 0 ]
-    then
-        # if we can't find a kernel, try to grab it off the CM github
-        T=$(gettop)
-        if [ $T ]; then
-            pushd . >& /dev/null
-            cd $T
-            source build/tools/bottleservice.sh
-            champagne $product || return 1
-            popd >& /dev/null
-        fi
-    fi
-
     if [ $? -ne 0 ]
     then
         echo
@@ -654,6 +641,14 @@ function lunch()
     fixup_common_out_dir
 
     set_stuff_for_environment
+    T=$(gettop)
+    if [ $T ]; then
+        pushd . >& /dev/null
+        cd $T
+        source build/tools/bottleservice.sh
+        champagne $product || return 1
+        popd >& /dev/null
+    fi
     printconfig
 }
 
