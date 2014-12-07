@@ -97,6 +97,17 @@ else
   endif
 endif
 
+# USE_BINARY_FLAGS is set in $(BUILD_SYSTEM)/vanir_config.mk.
+# To be used used as a way to test global build flags persistently.
+ifndef LOCAL_IS_HOST_MODULE
+  ifdef ($(USE_BINARY_FLAGS),true)
+    LOCAL_CFLAGS += $(call cc-option,$(VANIR_BINARY_CFLAG_OPTIONS))
+    LOCAL_CPPFLAGS += $(call cc-option,$(VANIR_BINARY_CPP_OPTIONS))
+    LOCAL_LDFLAGS += $(call cc-option,$(VANIR_LINKER_OPTIONS))
+    LOCAL_ASFLAGS += $(call cc-option,$(VANIR_ASSEMBLER_OPTIONS))
+  endif
+endif
+
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
