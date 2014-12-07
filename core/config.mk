@@ -145,6 +145,9 @@ ANDROID_BUILDSPEC := $(TOPDIR)buildspec.mk
 endif
 -include $(ANDROID_BUILDSPEC)
 
+# set defaults before target makefiles
+-include $(BUILD_SYSTEM)/kernel_config.mk
+
 # ---------------------------------------------------------------
 # Define most of the global variables.  These are the ones that
 # are specific to the user's build configuration.
@@ -628,5 +631,7 @@ include $(BUILD_SYSTEM)/qcom_target.mk
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
 $(eval include vendor/vanir/sepolicy/sepolicy.mk)
+
+include $(BUILD_SYSTEM)/kernel_config.mk # set meat and potatoes for dumpvar.mk
 
 include $(BUILD_SYSTEM)/dumpvar.mk
