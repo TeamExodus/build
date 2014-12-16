@@ -29,7 +29,7 @@
 # FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for what is considered an aliasing violation
 
 # SET GLOBAL CONFIGURATION HERE:
-MAXIMUM_OVERDRIVE       ?=
+MAXIMUM_OVERDRIVE       ?= true
 NO_DEBUG_SYMBOL_FLAGS   ?= true
 NO_DEBUG_FRAME_POINTERS ?= true
 USE_GRAPHITE            ?=
