@@ -716,7 +716,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra('set_metadata_recursive("/system/etc/boot.d", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
   script.AppendExtra('set_metadata_recursive("/system/etc/cron", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
 
-  script.Print(" ")
+  script.Print(" Installation complete.")
   script.Print(" ")
 
   script.UnmountAll()
