@@ -564,6 +564,7 @@ reboot_now("%(bcb_dev)s", "recovery");
 else if get_stage("%(bcb_dev)s") == "3/3" then
 """ % bcb_dev)
 
+  script.SmartUnmount("/system")
   device_specific.FullOTA_InstallBegin()
 
   script.ShowProgress(0.5, 0)
@@ -585,8 +586,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("  Exodus Vanir - Android 5.0 ")
   script.Print("    by PrimeDirective && Team Vanir ")
   script.Print(" ")
-
-  script.SmartUnmount("/system")
 
   if OPTIONS.backuptool:
     if block_based:
