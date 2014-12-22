@@ -1,12 +1,17 @@
-These are the projects within vanir containing exodus branches.  All should
+These are the projects within vanir's github containing exodus branches.  All should
 be included in vanir's gerrit.  To contribute push to refs/for/EXODUS.
 If you're interested in contributing to a project not listed here and would
 not like to submit to vanir's basic L5 branch for review send an email or
 contact PrimeDirective on hangouts @ ActiveThrasher00@gmail.com and I'll add
 the projects you need.
 
+Vanir repos with exodus branches
 build
 frameworks_base
 packages_apps_Settings
 platform_manifest
 system_core
+vendor_vanir
+
+VanirExodus repos
+packages_apps_ExodusUpdater
