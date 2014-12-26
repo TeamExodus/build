@@ -26,15 +26,21 @@
 # USE_GRAPHITE := true adds graphite cflags to turn on graphite
 # USE_FSTRICT_FLAGS := true builds with fstrict-aliasing (thumb and arm)
 # USE_BINARY_FLAGS := true adds experimental binary flags that can be set here or in device trees
+# USE_EXTRA_CLANG_FLAGS := true allows additional flags to be passed to the Clang compiler
+# ADDITIONAL_TARGET_ARM_OPT := Additional flags may be appended here for GCC-specific modules, -O3 etc
+# ADDITIONAL_TARGET_THUMB_OPT := Additional flags may be appended here for GCC-specific modules, -O3 etc
 # FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for what is considered an aliasing violation
 
 # SET GLOBAL CONFIGURATION HERE:
-MAXIMUM_OVERDRIVE       ?= true
-NO_DEBUG_SYMBOL_FLAGS   ?= true
-NO_DEBUG_FRAME_POINTERS ?= true
-USE_GRAPHITE            ?=
-USE_FSTRICT_FLAGS       ?=
-USE_BINARY_FLAGS        ?=
+MAXIMUM_OVERDRIVE           ?= true
+NO_DEBUG_SYMBOL_FLAGS       ?= true
+NO_DEBUG_FRAME_POINTERS     ?= true
+USE_GRAPHITE                ?=
+USE_FSTRICT_FLAGS           ?=
+USE_BINARY_FLAGS            ?=
+USE_EXTRA_CLANG_FLAGS       ?=
+ADDITIONAL_TARGET_ARM_OPT   ?=
+ADDITIONAL_TARGET_THUMB_OPT ?=
 FSTRICT_ALIASING_WARNING_LEVEL ?= 2
 
 ifeq ($(FSTRICT_ALIASING_WARNING_LEVEL),)
@@ -48,6 +54,9 @@ ifeq ($(BONE_STOCK),true)
   USE_GRAPHITE            :=
   USE_FSTRICT_FLAGS       :=
   USE_BINARY_FLAGS        :=
+  USE_EXTRA_CLANG_FLAGS   :=
+  ADDITIONAL_TARGET_ARM_OPT   :=
+  ADDITIONAL_TARGET_THUMB_OPT :=
 endif
 
 # DEBUGGING OPTIONS
@@ -76,6 +85,27 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
           -fstrict-aliasing \
           -Wstrict-aliasing=$(FSTRICT_ALIASING_WARNING_LEVEL) \
           -Werror=strict-aliasing
+endif
+
+# Additional GCC-specific arm cflags
+ifeq ($(ADDITIONAL_TARGET_ARM_OPT),true)
+    VANIR_TARGET_ARM_FLAGS := \
+        -ftree-vectorize \
+        -funsafe-loop-optimizations
+endif
+
+# Additional GCC-specific thumb cflags
+ifeq ($(ADDITIONAL_TARGET_THUMB_OPT),true)
+    VANIR_TARGET_THUMB_FLAGS := \
+        -funsafe-math-optimizations
+endif
+
+# Additional clang-specific cflags
+ifeq ($(USE_EXTRA_CLANG_FLAGS),true)
+    VANIR_CLANG_CONFIG_EXTRA_ASFLAGS :=
+    VANIR_CLANG_CONFIG_EXTRA_CFLAGS :=
+    VANIR_CLANG_CONFIG_EXTRA_CPPFLAGS :=
+    VANIR_CLANG_CONFIG_EXTRA_LDFLAGS :=
 endif
 
 # variables as exported to other makefiles
