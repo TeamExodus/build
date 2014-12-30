@@ -146,6 +146,14 @@ class EdifyGenerator(object):
            ");")
     self.script.append(self._WordWrap(cmd))
 
+  def RunAutomagic(self):
+    self.script.append('package_extract_file("system/bin/automagic.sh", "/tmp/automagic.sh");')
+    if not self.info.get("use_set_metadata", False):
+      self.script.append('set_perm(0, 0, 0755, "/tmp/automagic.sh");')
+    else:
+      self.script.append('set_metadata("/tmp/automagic.sh", "uid", 0, "gid", 0, "mode", 0755);')
+    self.script.append('run_program("/tmp/automagic.sh");')
+
   def RunBackup(self, command):
     self.script.append('package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");')
     self.script.append('package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");')

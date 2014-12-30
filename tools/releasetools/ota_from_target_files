@@ -589,6 +589,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.backuptool:
     if block_based:
+      common.ZipWriteStr(output_zip, "system/bin/automagic.sh",
+                     ""+input_zip.read("SYSTEM/bin/automagic.sh"))
       common.ZipWriteStr(output_zip, "system/bin/backuptool.sh",
                      ""+input_zip.read("SYSTEM/bin/backuptool.sh"))
       common.ZipWriteStr(output_zip, "system/bin/backuptool.functions",
@@ -610,9 +612,11 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   script.AppendExtra("if is_mounted(\"/data\") then")
   script.ValidateSignatures("data")
+  script.RunAutomagic()
   script.AppendExtra("else")
   script.Mount("/data")
   script.ValidateSignatures("data")
+  script.RunAutomagic()
   script.Unmount("/data")
   script.AppendExtra("endif;")
 
