@@ -24,16 +24,9 @@ CLANG_CONFIG_arm_UNKNOWN_CFLAGS := \
   -fno-align-jumps \
   -Wa,--noexecstack
 
-ifeq ($(TARGET_CPU_VARIANT),krait)
-  define subst-clang-incompatible-arm-flags
-    $(subst -mcpu=cortex-a15,-mcpu=krait2,\
-    $(1))
-  endef
-else
-  define subst-clang-incompatible-arm-flags
-    $(subst -march=armv5te,-march=armv5t,\
-    $(subst -march=armv5e,-march=armv5,\
-    $(subst -mcpu=cortex-a15,-march=armv7-a,\
-    $(1))))
-  endef
-endif
+define subst-clang-incompatible-arm-flags
+  $(subst -march=armv5te,-march=armv5t,\
+  $(subst -march=armv5e,-march=armv5,\
+  $(subst -mcpu=cortex-a15,-march=armv7-a,\
+  $(1))))
+endef
