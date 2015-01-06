@@ -12,6 +12,14 @@ packages_apps_Settings
 platform_manifest
 system_core
 vendor_vanir
+device_lge_g2-common
 
 VanirExodus repos
 packages_apps_ExodusUpdater
+build
+frameworks_base
+packages_apps_Settings
+platform_manifest
+system_core
+vendor_vanir
+device_lge_g2-common
