@@ -603,6 +603,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
                      ""+input_zip.read("SYSTEM/bin/backuptool.sh"))
       common.ZipWriteStr(output_zip, "system/bin/backuptool.functions",
                      ""+input_zip.read("SYSTEM/bin/backuptool.functions"))
+      common.ZipWriteStr(output_zip, "system/build.prop",
+                     ""+input_zip.read("SYSTEM/build.prop"))
     script.Mount("/system")
     script.RunBackup("backup")
     script.Unmount("/system")
