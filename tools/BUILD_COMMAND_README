@@ -3,19 +3,36 @@ remember: links to tutorials are located in the readme in /manifest
 build command list:
 
 - hmm:       printscreen of build commands
-- lunch:     lunch <product_name>-<build_variant>
-- tapas:     tapas [<App1> <App2> ...] [arm|x86|mips] [eng|userdebug|user]
-- croot:     Changes directory to the top of the tree.
-- m:         Makes from the top of the tree.
-- mm:        Builds all of the modules in the current directory.
-- mmm:       Builds all of the modules in the supplied directories.
-- cgrep:     Greps on all local C/C++ files.
-- jgrep:     Greps on all local Java files.
-- resgrep:   Greps on all local res/*.xml files.
-- mgrep:     Greps on all local .mk or "make" files.
-- godir:     Go to the directory containing a file.
-- mka:       Builds using SCHED_BATCH on all processors. targets work in any subdirectory.
+- lunch:   lunch <product_name>-<build_variant>
+- tapas:   tapas [<App1> <App2> ...] [arm|x86|mips|armv5|arm64|x86_64|mips64] [eng|userdebug|user]
+- croot:   Changes directory to the top of the tree.
+- cout:    Changes directory to out.
+- m:       Makes from the top of the tree.
+- mm:      Builds all of the modules in the current directory, but not their dependencies.
+- mmm:     Builds all of the modules in the supplied directories, but not their dependencies.
+           To limit the modules being built use the syntax: mmm dir/:target1,target2.
+- mma:     Builds all of the modules in the current directory, and their dependencies.
+- mmp:     Builds all of the modules in the current directory and pushes them to the device.
+- mmmp:    Builds all of the modules in the supplied directories and pushes them to the device.
+- mmma:    Builds all of the modules in the supplied directories, and their dependencies.
+- cgrep:   Greps on all local C/C++ files.
+- ggrep:   Greps on all local Gradle files.
+- jgrep:   Greps on all local Java files.
+- resgrep: Greps on all local res/*.xml files.
+- sgrep:   Greps on all local source files.
+- godir:   Go to the directory containing a file.
+- aospremote: Add git remote for matching AOSP repository
+- cafremote: Add git remote for matching CodeAurora repository.
+- mka:      Builds using SCHED_BATCH on all processors
+- mkap:     Builds the module(s) using mka and pushes them to the device.
+- cmka:     Cleans and builds using mka.
+- reposync: Parallel repo sync using ionice and SCHED_BATCH
+- repopick: Utility to fetch changes from Gerrit.
+- installboot: Installs a boot.img to the connected device.
+- installrecovery: Installs a recovery.img to the connected device.
+- smash:    clean out the out directory of your lunched target only.
 - mka bacon: Primary build command.  builds ota and runs squisher/optimizations using SCHED_BATCH on all processors (-j8).
+- mka kernel: builds the kernel for the lunched build and spits it into the product out dir as devicename_kernel.zip
 - mkaflash:  Same as mka in the top of the tree with the addition of flashing the rom, gapps, and addon zips.
 - mkapush:   Same as mka with the addition of adb pushing to the device.
 - reposync:  Parallel repo sync using ionice and SCHED_BATCH
