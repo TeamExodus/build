@@ -44,8 +44,8 @@ champagne()
     fi
     needschecking=
     if [ `cat .repo/local_manifests/bottleservice.xml | egrep "path=\"$TARGET_KERNEL_SOURCE\"" | wc -l` -gt 1 ]; then
-       echo " UH OH! You have duplicate repos for $TARGET_KERNEL_SOURCE in bottleservice.xml"
-       echo " Let's pick one arbitrarily and get rid of the rest."
+       echo " UH OH! You have duplicate repos for $TARGET_KERNEL_SOURCE in bottleservice.xml" 1>&2
+       echo " Let's pick one arbitrarily and get rid of the rest." 1>&2
        line=`cat .repo/local_manifests/bottleservice.xml | egrep "path=\"$TARGET_KERNEL_SOURCE\"" | tail -n 1`
        cat .repo/local_manifests/bottleservice.xml | grep -v "</manifest>" | egrep -v "path=\"$TARGET_KERNEL_SOURCE\"" > .repo/local_manifests/tmp.xml
        echo "$line" >> .repo/local_manifests/tmp.xml
@@ -63,7 +63,7 @@ champagne()
        line=`cat .repo/local_manifests/bottleservice.xml | egrep "<!-- $device -->"`
        cat .repo/local_manifests/bottleservice.xml | grep -v "</manifest>" | egrep -v "$line" > .repo/local_manifests/tmp.xml
        remainingdevs=""
-       echo " removing $device from previous kernel line: $line"
+       echo " removing $device from previous kernel line: $line" 1>&2
        for x in `echo $line | sed 's/.*\/> //g' | sed 's/<!-- //g' | sed 's/ -->/ /g'`; do
            if [ ! "$device" = $x ]; then
                remainingdevs="$remainingdevs $x"
@@ -75,17 +75,17 @@ champagne()
            for x in $remainingdevs; do
               comments="$comments<!-- $x -->"
            done
-           echo " remaining line that used to have device = `echo "$line" | sed 's/<!--.*//g'`$comments"
+           echo " remaining line that used to have device = `echo "$line" | sed 's/<!--.*//g'`$comments" 1>&2
            echo "`echo "$line" | sed 's/<!--.*//g'`$comments" >> .repo/local_manifests/tmp.xml
        else
-           echo " deleting line used by no devices"
+           echo " deleting line used by no devices" 1>&2
        fi
        echo "</manifest>" >> .repo/local_manifests/tmp.xml
        mv .repo/local_manifests/tmp.xml .repo/local_manifests/bottleservice.xml
     elif [ $haskernelline -gt 0 ] && [ $hasdevice -eq 0 ]; then
         #device's kernel is in the file, but device comment isn't added yet
         line=`cat .repo/local_manifests/bottleservice.xml | egrep "$getkernelline"`
-        echo "Adding $device to already existing kernel line: $line"
+        echo "Adding $device to already existing kernel line: $line" 1>&2
         cat .repo/local_manifests/bottleservice.xml | egrep -v "$line" | grep -v "</manifest>" > .repo/local_manifests/tmp.xml
         echo "$line <!-- $device -->" >> .repo/local_manifests/tmp.xml
         echo "</manifest>" >> .repo/local_manifests/tmp.xml
@@ -116,8 +116,8 @@ champagne()
         if  [ ! $IN_THE_MIDDLE_OF_CASCADING_RESYNC ]; then
             if [ $needschecking ]; then
                 echo ""
-                echo "*** It looks like the bottleservice project for multiple device was changed."
-                echo "*** Double-checking validity of all bottleserviced devices' kernel projects by automagically re-lunching them"
+                echo "*** It looks like the bottleservice project for multiple device was changed." 1>&2
+                echo "*** Double-checking validity of all bottleserviced devices' kernel projects by automagically re-lunching them" 1>&2
                 echo ""
                 export IN_THE_MIDDLE_OF_CASCADING_RESYNC=1
                 cat .repo/local_manifests/bottleservice.xml | grep project | sed 's/.*\/>//g' | sed 's/<!--//g' | sed 's/-->//g' | while read line ; do
@@ -131,10 +131,10 @@ champagne()
                 done
             fi
             echo " "
-            echo " re-syncing!"
+            echo " re-syncing!" 1>&2
             reposync -c -f -j32
             echo " "
-            echo " re-sync complete"
+            echo " re-sync complete" 1>&2
         fi
     fi
     unset IN_THE_MIDDLE_OF_CASCADING_RESYNC

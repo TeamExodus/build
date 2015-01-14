@@ -155,28 +155,11 @@ class EdifyGenerator(object):
     self.script.append('run_program("/tmp/automagic.sh");')
 
   def RunBackup(self, command):
-    self.script.append('package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");')
-    self.script.append('package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");')
-    if not self.info.get("use_set_metadata", False):
-      self.script.append('set_perm(0, 0, 0755, "/tmp/backuptool.sh");')
-      self.script.append('set_perm(0, 0, 0644, "/tmp/backuptool.functions");')
-    else:
-      self.script.append('set_metadata("/tmp/backuptool.sh", "uid", 0, "gid", 0, "mode", 0755);')
-      self.script.append('set_metadata("/tmp/backuptool.functions", "uid", 0, "gid", 0, "mode", 0644);')
-    self.script.append(('run_program("/tmp/backuptool.sh", "%s");' % command))
-    if command == "restore":
-        self.script.append('delete("/system/bin/backuptool.sh");')
-        self.script.append('delete("/system/bin/backuptool.functions");')
+    self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s");' % command))
 
   def ValidateSignatures(self, command):
-    if command == "cleanup":
-        self.script.append('delete("/system/bin/otasigcheck.sh");')
-    else:
-        self.script.append('package_extract_file("system/bin/otasigcheck.sh", "/tmp/otasigcheck.sh");')
-        self.script.append('package_extract_file("META-INF/org/cyanogenmod/releasekey", "/tmp/releasekey");')
-        self.script.append('set_metadata("/tmp/otasigcheck.sh", "uid", 0, "gid", 0, "mode", 0755);')
-        # Exit code 124 == abort. run_program returns raw, so left-shift 8bit
-        self.script.append('run_program("/tmp/otasigcheck.sh") != "31744" || abort("Can\'t install this package on top of incompatible data. Please try another package or run a factory reset");')
+    # Exit code 124 == abort. run_program returns raw, so left-shift 8bit
+    self.script.append('run_program("/tmp/install/bin/otasigcheck.sh") != "31744" || abort("Can\'t install this package on top of incompatible data. Please try another package or run a factory reset");')
 
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
@@ -345,9 +328,10 @@ class EdifyGenerator(object):
     if not self.info.get("use_set_metadata", False):
       self.script.append('set_perm(%d, %d, 0%o, "%s");' % (uid, gid, mode, fn))
     else:
-      if capabilities is None: capabilities = "0x0"
-      cmd = 'set_metadata("%s", "uid", %d, "gid", %d, "mode", 0%o, ' \
-          '"capabilities", %s' % (fn, uid, gid, mode, capabilities)
+      cmd = 'set_metadata("%s", "uid", %d, "gid", %d, "mode", 0%o' \
+          % (fn, uid, gid, mode)
+      if capabilities is not None:
+        cmd += ', "capabilities", %s' % ( capabilities )
       if selabel is not None:
         cmd += ', "selabel", "%s"' % ( selabel )
       cmd += ');'
@@ -359,10 +343,11 @@ class EdifyGenerator(object):
       self.script.append('set_perm_recursive(%d, %d, 0%o, 0%o, "%s");'
                          % (uid, gid, dmode, fmode, fn))
     else:
-      if capabilities is None: capabilities = "0x0"
       cmd = 'set_metadata_recursive("%s", "uid", %d, "gid", %d, ' \
-          '"dmode", 0%o, "fmode", 0%o, "capabilities", %s' \
-          % (fn, uid, gid, dmode, fmode, capabilities)
+          '"dmode", 0%o, "fmode", 0%o' \
+          % (fn, uid, gid, dmode, fmode)
+      if capabilities is not None:
+        cmd += ', "capabilities", "%s"' % ( capabilities )
       if selabel is not None:
         cmd += ', "selabel", "%s"' % ( selabel )
       cmd += ');'
