@@ -1678,6 +1678,13 @@ else
 	$(hide) ./vendor/$(DHO_VENDOR)/tools/squisher $(SQUISHER_ARGS)
 endif
 
+ifeq ($(USE_PREBUILT_CHROMIUM),1)
+ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
+	@echo "Running Chromium prebuilt setup script..."
+	$(hide) . $(TOPDIR)vendor/vanir/utils/chromium_prebuilt.sh $(TOP)
+endif
+endif
+
 ###################################################################
 #   setting a rule for accepting kernel as a variable with mka
 .PHONY: kernel
@@ -1689,13 +1696,6 @@ kernel:
 	@echo ""
 	$(hide) . $(TOPDIR)build/tools/makekernel.sh "$(TARGET_DEVICE$)" "$(KERNEL_TOOLCHAIN)" "$(TARGET_KERNEL_SOURCE)" "$(TARGET_KERNEL_CONFIG)"
 ###################################################################
-
-ifeq ($(USE_PREBUILT_CHROMIUM),1)
-ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
-	@echo "Running Chromium prebuilt setup script..."
-	$(hide) . $(TOPDIR)vendor/vanir/utils/chromium_prebuilt.sh $(TOP)
-endif
-endif
 
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
