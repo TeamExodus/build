@@ -49,9 +49,9 @@ $(combo_var_prefix)HAVE_STRLCPY := 0
 $(combo_var_prefix)HAVE_STRLCAT := 0
 $(combo_var_prefix)HAVE_KERNEL_MODULES := 0
 
-$(combo_var_prefix)GLOBAL_CFLAGS := -fno-exceptions -Wno-multichar
-$(combo_var_prefix)RELEASE_CFLAGS := -O2 -g -fno-strict-aliasing
-$(combo_var_prefix)GLOBAL_CPPFLAGS :=
+$(combo_var_prefix)GLOBAL_CFLAGS := $(VANIR_GLOBAL_CFLAGS) -fno-exceptions -Wno-multichar
+$(combo_var_prefix)RELEASE_CFLAGS := $(VANIR_ARM_OPT_LEVEL) $(VANIR_RELEASE_CFLAGS) -fno-strict-aliasing
+$(combo_var_prefix)GLOBAL_CPPFLAGS := $(VANIR_GLOBAL_CPPFLAGS)
 $(combo_var_prefix)GLOBAL_LDFLAGS :=
 $(combo_var_prefix)GLOBAL_ARFLAGS := crsPD
 $(combo_var_prefix)GLOBAL_LD_DIRS :=

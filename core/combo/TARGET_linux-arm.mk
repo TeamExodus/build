@@ -67,7 +67,7 @@ $(combo_2nd_arch_prefix)TARGET_STRIP := $($(combo_2nd_arch_prefix)TARGET_TOOLS_P
 
 $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    $(VANIR_ARM_OPT_LEVEL) \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops \
@@ -76,7 +76,7 @@ $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
 
 # Modules can choose to compile some source as thumb.
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb \
-                        -Os \
+                        $(VANIR_THUMB_OPT_LEVEL) \
                         -fomit-frame-pointer \
                         -fno-strict-aliasing \
                         $(VANIR_FSTRICT_OPTIONS) \
@@ -150,7 +150,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 # More flags/options can be added here
 $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
-			-g \
+			-g0 \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \

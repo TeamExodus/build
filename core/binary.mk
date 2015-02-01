@@ -385,6 +385,13 @@ arm_objects_cflags :=
 normal_objects_cflags :=
 endif
 
+# Workaround issues with fstrict-aliasing until properly fixed.
+ifeq ($(USE_FSTRICT_FLAGS),true)
+  ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(VANIR_SPECIAL_CASE_MODULES)))
+    LOCAL_CFLAGS += $(call cc-option,-fno-strict-aliasing)
+  endif
+endif
+
 ###########################################################
 ## Define per-module debugging flags.  Users can turn on
 ## debugging for a particular module by setting DEBUG_MODULE_ModuleName

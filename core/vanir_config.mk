@@ -29,7 +29,9 @@
 # USE_EXTRA_CLANG_FLAGS := true allows additional flags to be passed to the Clang compiler
 # ADDITIONAL_TARGET_ARM_OPT := Additional flags may be appended here for GCC-specific modules, -O3 etc
 # ADDITIONAL_TARGET_THUMB_OPT := Additional flags may be appended here for GCC-specific modules, -O3 etc
-# FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for what is considered an aliasing violation
+# VANIR_ARM_OPT_LEVEL := -Ox for TARGET_arm_CFLAGS, preserved in binary.mk
+# VANIR_THUMB_OPT_LEVEL := -Ox for TARGET_thumb_CFLAGS, preserved in binary.mk
+# USE_LOCAL_WARNING_OVERRIDES := true will apply set flags only in listed modules. Designed for to turn off specific werrors.
 
 # SET GLOBAL CONFIGURATION HERE:
 MAXIMUM_OVERDRIVE           ?= true
@@ -41,9 +43,14 @@ USE_BINARY_FLAGS            ?=
 USE_EXTRA_CLANG_FLAGS       ?=
 ADDITIONAL_TARGET_ARM_OPT   ?=
 ADDITIONAL_TARGET_THUMB_OPT ?=
+VANIR_ARM_OPT_LEVEL         ?= -O2
+VANIR_THUMB_OPT_LEVEL       ?= -Os
 FSTRICT_ALIASING_WARNING_LEVEL ?= 2
 
+# Set some defaults in case they are missing
 ifeq ($(FSTRICT_ALIASING_WARNING_LEVEL),)
+  VANIR_ARM_OPT_LEVEL         ?= -O2
+  VANIR_THUMB_OPT_LEVEL       ?= -Os
   FSTRICT_ALIASING_WARNING_LEVEL := 2
 endif
 
@@ -55,6 +62,8 @@ ifeq ($(BONE_STOCK),true)
   USE_FSTRICT_FLAGS       :=
   USE_BINARY_FLAGS        :=
   USE_EXTRA_CLANG_FLAGS   :=
+  VANIR_ARM_OPT_LEVEL     := -O2
+  VANIR_THUMB_OPT_LEVEL   := -Os
   ADDITIONAL_TARGET_ARM_OPT   :=
   ADDITIONAL_TARGET_THUMB_OPT :=
 endif
@@ -79,8 +88,11 @@ ifeq ($(USE_GRAPHITE),true)
           -floop-block
 endif
 
-# fstrict-aliasing. Thumb is defaulted off for AOSP.
+# fstrict-aliasing. Thumb is defaulted off for AOSP. Use VANIR_SPECIAL_CASE_MODULES to
+# temporarily disable fstrict-aliasing locally until properly fixed.
 ifeq ($(USE_FSTRICT_FLAGS),true)
+    VANIR_SPECIAL_CASE_MODULES :=
+
   FSTRICT_FLAGS := \
           -fstrict-aliasing \
           -Wstrict-aliasing=$(FSTRICT_ALIASING_WARNING_LEVEL) \
@@ -114,6 +126,7 @@ VANIR_FSTRICT_OPTIONS := $(FSTRICT_FLAGS)
 VANIR_GLOBAL_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 VANIR_RELEASE_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 VANIR_CLANG_TARGET_GLOBAL_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
+VANIR_GLOBAL_CPPFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 
 # set experimental/unsupported flags here for persistance and try to override local options that
 # may be set after release flags.  This option should not be used to set flags globally that are
