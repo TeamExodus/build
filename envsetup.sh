@@ -477,13 +477,15 @@ unset LUNCH_MENU_CHOICES
 function add_lunch_combo()
 {
     local new_combo=$1
-    local c
-    for c in ${LUNCH_MENU_CHOICES[@]} ; do
-        if [ "$new_combo" = "$c" ] ; then
-            return
-        fi
-    done
-    LUNCH_MENU_CHOICES=(${LUNCH_MENU_CHOICES[@]} $new_combo)
+    if [[ $new_combo == vanir_* ]]; then
+        local c
+        for c in ${LUNCH_MENU_CHOICES[@]} ; do
+            if [ "$new_combo" = "$c" ] ; then
+                return
+            fi
+        done
+        LUNCH_MENU_CHOICES=(${LUNCH_MENU_CHOICES[@]} $new_combo)
+    fi
 }
 
 # add the default one here
@@ -491,7 +493,16 @@ function add_lunch_combo()
 function print_lunch_menu()
 {
     local uname=$(uname)
-    echo
+    echo -en '\033[0;31m'" \n"
+    echo "     ______               __           "
+    echo "    / ____/  ______  ____/ /_  _______ "
+    echo "   / __/ | |/_/ __ \/ __  / / / / ___/ "
+    echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
+    echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
+    echo " "
+    echo "  Exodus Vanir - Android 5.0 "
+    echo "    by PrimeDirective && Team Exodus "
+    echo -en '\033[0m'" \n"
     echo "You're building on" $uname
     if [ "$(uname)" = "Darwin" ] ; then
        echo "  (ohai, koush!)"
@@ -507,6 +518,9 @@ function print_lunch_menu()
     local choice
     for choice in ${LUNCH_MENU_CHOICES[@]}
     do
+        if [[ $choice == vanir_* ]]; then
+            choice="${choice/vanir/exodus}"
+        fi
         echo " $i. $choice "
         i=$(($i+1))
     done | column
@@ -1815,6 +1829,18 @@ function mka() {
 T=$(gettop)
 CWD=$(pwd)
 croot
+
+echo -en '\033[0;31m'" \n"
+echo "     ______               __           "
+echo "    / ____/  ______  ____/ /_  _______ "
+echo "   / __/ | |/_/ __ \/ __  / / / / ___/ "
+echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
+echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
+echo " "
+echo "  Exodus Vanir - Android 5.0 "
+echo "    by PrimeDirective && Team Exodus "
+echo -en '\033[0m'" \n"
+
 if [ ! "$T" ]; then
     echo "Couldn't locate the top of the tree.  CD into it, or try setting TOP." >&2
     return
