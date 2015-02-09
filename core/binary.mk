@@ -106,6 +106,15 @@ ifndef LOCAL_IS_HOST_MODULE
     LOCAL_LDFLAGS += $(call cc-option,$(VANIR_LINKER_OPTIONS))
     LOCAL_ASFLAGS += $(call cc-option,$(VANIR_ASSEMBLER_OPTIONS))
   endif
+
+# Workaround issues with fstrict-aliasing until properly fixed.
+ifeq ($(USE_FSTRICT_FLAGS),true)
+  ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(VANIR_FNO_STRICT_ALIASING_MODULES)))
+    LOCAL_CONLYFLAGS += -fno-strict-aliasing
+    LOCAL_CPPFLAGS += -fno-strict-aliasing
+    LOCAL_CFLAGS += -fno-strict-aliasing
+  endif
+endif
 endif
 
 # The following LOCAL_ variables will be modified in this file.
@@ -383,13 +392,6 @@ arm_objects_mode :=
 normal_objects_mode :=
 arm_objects_cflags :=
 normal_objects_cflags :=
-endif
-
-# Workaround issues with fstrict-aliasing until properly fixed.
-ifeq ($(USE_FSTRICT_FLAGS),true)
-  ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(VANIR_SPECIAL_CASE_MODULES)))
-    LOCAL_CFLAGS += $(call cc-option,-fno-strict-aliasing)
-  endif
 endif
 
 ###########################################################
