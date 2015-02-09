@@ -32,12 +32,14 @@
 # VANIR_ARM_OPT_LEVEL := -Ox for TARGET_arm_CFLAGS, preserved in binary.mk
 # VANIR_THUMB_OPT_LEVEL := -Ox for TARGET_thumb_CFLAGS, preserved in binary.mk
 # FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for the level of intensity the compiler checks for violations.
+# USE_LTO := true builds the listed modules with the -flto flags
 
 # SET GLOBAL CONFIGURATION HERE:
 MAXIMUM_OVERDRIVE           ?= true
 NO_DEBUG_SYMBOL_FLAGS       ?= true
 NO_DEBUG_FRAME_POINTERS     ?= true
 USE_GRAPHITE                ?=
+USE_LTO                     ?= true
 USE_FSTRICT_FLAGS           ?= true
 USE_BINARY_FLAGS            ?=
 USE_EXTRA_CLANG_FLAGS       ?=
@@ -86,6 +88,33 @@ ifeq ($(USE_GRAPHITE),true)
           -floop-interchange     \
           -floop-strip-mine      \
           -floop-block
+endif
+
+# Assign modules to build with link time optimizations using VANIR_LTO_MODULES.
+ifeq ($(USE_LTO),true)
+  VANIR_LTO_MODULES := \
+    core.art \
+    libart \
+    libart-compiler \
+    libartd \
+    libartd-compiler \
+    libart-disassembler \
+    libartd-disassembler \
+    libsigchain \
+    dalvikvm \
+    dalvikvm32 \
+    dalvikvm64 \
+    libart-gtest \
+    libegl \
+    egl.cfg \
+    libGLESv2 \
+    libGLESv1_CM
+    
+
+  VANIR_LTO_FLAGS := \
+    -flto \
+    -fuse-linker-plugin \
+    $(DEBUG_SYMBOL_FLAGS)
 endif
 
 # fstrict-aliasing. Thumb is defaulted off for AOSP. Use VANIR_SPECIAL_CASE_MODULES to
@@ -158,7 +187,9 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
 	libssh \
 	ssh \
 	libOmxVdec \
-    mm-vdec-omx-test
+    mm-vdec-omx-test \
+    libpdfiumcore \
+    libpdfium
 
 # external/ffmpeg
   VANIR_FNO_STRICT_ALIASING_MODULES += \
