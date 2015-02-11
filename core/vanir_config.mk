@@ -108,8 +108,12 @@ ifeq ($(USE_LTO),true)
     libegl \
     egl.cfg \
     libGLESv2 \
-    libGLESv1_CM
-    
+    libGLESv1_CM \
+    libcutils \
+    libdl \
+    libselinux \
+    libutils \
+    libsigchain
 
   VANIR_LTO_FLAGS := \
     -flto \
@@ -187,6 +191,7 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
 	libssh \
 	ssh \
 	libOmxVdec \
+	libOmxVenc \
     mm-vdec-omx-test \
     libpdfiumcore \
     libpdfium
