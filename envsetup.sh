@@ -2216,9 +2216,9 @@ unset f
 if [ $STFU_REPO ]; then
     pushd . >& /dev/null
     cd $(gettop)/.repo/repo
-    [ `git remote -v | grep vanir | wc -l` -eq 0 ] && git remote add vanir http://www.emccann.net/repo
-    git fetch vanir >& /dev/null
-    git checkout vanir/master >& /dev/null
+    [ `git remote -v | grep github | wc -l` -eq 0 ] && git remote add github https://github.com/nuclearmistake/repo
+    git fetch github >& /dev/null
+    git checkout github/master >& /dev/null
     popd >& /dev/null
 fi
 
