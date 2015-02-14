@@ -108,12 +108,7 @@ ifeq ($(USE_LTO),true)
     libegl \
     egl.cfg \
     libGLESv2 \
-    libGLESv1_CM \
-    libcutils \
-    libdl \
-    libselinux \
-    libutils \
-    libsigchain
+    libGLESv1_CM
 
   VANIR_LTO_FLAGS := \
     -flto \
