@@ -122,13 +122,7 @@ endif
 # error it contains is properly fixed.
 ifeq ($(USE_FSTRICT_FLAGS),true)
   VANIR_FNO_STRICT_ALIASING_MODULES := \
-	libc_bionic \
-    libandroid_runtime \
     libziparchive-host \
-	libc_dns \
-	libc_tzcode \
-	libc_openbsd \
-	libc \
 	logd \
 	mdnsd \
 	libziparchive \
@@ -161,7 +155,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
 	libstlport \
 	libstlport_static \
 	libutils \
-	libandroidfw \
 	dnsmasq \
 	libwebviewchromium \
 	libwebviewchromium_loader \
