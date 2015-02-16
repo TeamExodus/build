@@ -21,8 +21,6 @@
 
 PRODUCT_PACKAGES += \
     BasicDreams \
-    Browser \
-    Calculator \
     CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
@@ -30,8 +28,6 @@ PRODUCT_PACKAGES += \
     DeskClock \
     DocumentsUI \
     DownloadProviderUi \
-    Email \
-    Exchange2 \
     ExternalStorageProvider \
     FusedLocation \
     InputDevices \
@@ -45,7 +41,6 @@ PRODUCT_PACKAGES += \
     libpac \
     PrintSpooler \
     ProxyHandler \
-    QuickSearchBox \
     Settings \
     SharedStorageBackup \
     Telecom \
