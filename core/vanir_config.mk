@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2014 VanirAOSP && The Android Open Source Project
-# Copyright (C) 2015 Exodus/Vanir
+# Copyright (C) 2015 Exodus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -139,19 +139,8 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
 	libfdlibm \
 	libvariablespeed \
 	librtp_jni \
-	libdownmix \
 	libldnhncr \
-	libqcomvisualizer \
 	libwilhelm \
-	libvisualizer \
-	libstagefright \
-	libstagefright_webm \
-	libmedia \
-	libreverb \
-	libaudioflinger \
-	libmediaplayerservice \
-	libstagefright_soft_h264dec \
-	libmusicbundle \
 	libstlport \
 	libstlport_static \
 	libutils \
@@ -166,8 +155,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
 	third_party_WebKit_Source_core_webcore_remaining_gyp \
 	third_party_angle_src_translator_lib_gyp \
 	third_party_WebKit_Source_core_webcore_generated_gyp \
-	libc_gdtoa \
-	libc_nomalloc \
 	libft2 \
 	libjni_jpegstream \
 	libjni_filtershow_filters \
@@ -183,7 +170,11 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
 	libOmxVenc \
     mm-vdec-omx-test \
     libpdfiumcore \
-    libpdfium
+    libpdfium \
+    libstagefright_soft_h264dec \
+    libmusicbundle \
+    libreverb \
+    libqcomvisualizer
 
 # external/ffmpeg
   VANIR_FNO_STRICT_ALIASING_MODULES += \
