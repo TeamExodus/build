@@ -97,8 +97,7 @@ else
   endif
 endif
 
-# USE_BINARY_FLAGS is set in $(BUILD_SYSTEM)/vanir_config.mk.
-# To be used used as a way to test global build flags persistently.
+# Set the optional flags listed in $(BUILD_SYSTEM)/vanir_config.mk.
 ifndef LOCAL_IS_HOST_MODULE
   ifdef ($(USE_BINARY_FLAGS),true)
     LOCAL_CFLAGS += $(call cc-option,$(VANIR_BINARY_CFLAG_OPTIONS))

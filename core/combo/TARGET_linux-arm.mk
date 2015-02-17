@@ -71,7 +71,6 @@ $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    $(VANIR_ARM_OPT_LEVEL) \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops \
-                        $(VANIR_ARM_FSTRICT_OPTIONS) \
                         $(VANIR_TARGET_ARM_FLAGS)
 
 # Modules can choose to compile some source as thumb.
@@ -113,6 +112,8 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			$(arch_variant_cflags) \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h)) \
+			$(DEBUG_SYMBOL_FLAGS) \
+			$(DEBUG_FRAME_POINTER_FLAGS) \
 			$(VANIR_FSTRICT_OPTIONS)
 
 # The "-Wunused-but-set-variable" option often breaks projects that enable
@@ -150,11 +151,13 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 # More flags/options can be added here
 $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
-			-g0 \
+			-g \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers
+			-frename-registers \
+			$(DEBUG_SYMBOL_FLAGS) \
+			$(DEBUG_FRAME_POINTER_FLAGS)
 
 libc_root := bionic/libc
 libm_root := bionic/libm

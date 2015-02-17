@@ -28,11 +28,11 @@
 # USE_FSTRICT_FLAGS := true builds with fstrict-aliasing (thumb and arm)
 # USE_BINARY_FLAGS := true adds experimental binary flags that can be set here or in device trees
 # USE_EXTRA_CLANG_FLAGS := true allows additional flags to be passed to the Clang compiler
-# ADDITIONAL_TARGET_ARM_OPT := Additional flags may be appended here for GCC-specific modules, -O3 etc
-# ADDITIONAL_TARGET_THUMB_OPT := Additional flags may be appended here for GCC-specific modules, -O3 etc
+# ADDITIONAL_TARGET_ARM_OPT := Additional flags may be appended here for GCC-specific modules
+# ADDITIONAL_TARGET_THUMB_OPT := Additional flags may be appended here for GCC-specific modules
 # VANIR_ARM_OPT_LEVEL := -Ox for TARGET_arm_CFLAGS, preserved in binary.mk
 # VANIR_THUMB_OPT_LEVEL := -Ox for TARGET_thumb_CFLAGS, preserved in binary.mk
-# FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for the level of intensity the compiler checks for violations.
+# FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for the level of intensity the compiler checks for violations
 # USE_LTO := true builds the listed modules with the -flto flags
 
 # SET GLOBAL CONFIGURATION HERE:
@@ -46,27 +46,25 @@ USE_BINARY_FLAGS            ?=
 USE_EXTRA_CLANG_FLAGS       ?=
 ADDITIONAL_TARGET_ARM_OPT   ?=
 ADDITIONAL_TARGET_THUMB_OPT ?=
+
+# Set some defaults
 VANIR_ARM_OPT_LEVEL         ?= -O2
 VANIR_THUMB_OPT_LEVEL       ?= -Os
 FSTRICT_ALIASING_WARNING_LEVEL ?= 2
-
-# Set some defaults in case they are missing
-ifeq ($(FSTRICT_ALIASING_WARNING_LEVEL),)
-  VANIR_ARM_OPT_LEVEL         ?= -O2
-  VANIR_THUMB_OPT_LEVEL       ?= -Os
-  FSTRICT_ALIASING_WARNING_LEVEL := 2
-endif
 
 # Respect BONE_STOCK: strictly enforce AOSP defaults.
 ifeq ($(BONE_STOCK),true)
   MAXIUMUM_OVERDRIVE      :=
   NO_DEBUG_SYMBOL_FLAGS   :=
+  NO_DEBUG_FRAME_POINTERS :=
   USE_GRAPHITE            :=
+  USE_LTO                 :=
   USE_FSTRICT_FLAGS       :=
   USE_BINARY_FLAGS        :=
   USE_EXTRA_CLANG_FLAGS   :=
   VANIR_ARM_OPT_LEVEL     := -O2
   VANIR_THUMB_OPT_LEVEL   := -Os
+  FSTRICT_ALIASING_WARNING_LEVEL := 2
   ADDITIONAL_TARGET_ARM_OPT   :=
   ADDITIONAL_TARGET_THUMB_OPT :=
 endif
@@ -216,7 +214,7 @@ VANIR_FSTRICT_OPTIONS := $(FSTRICT_FLAGS)
 
 VANIR_GLOBAL_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 VANIR_RELEASE_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
-VANIR_CLANG_TARGET_GLOBAL_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
+VANIR_CLANG_TARGET_GLOBAL_CFLAGS += $(VANIR_FSTRICT_OPTIONS) $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 VANIR_GLOBAL_CPPFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 
 # set experimental/unsupported flags here for persistance and try to override local options that
