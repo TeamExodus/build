@@ -113,6 +113,11 @@ ifndef LOCAL_IS_HOST_MODULE
       LOCAL_CPPFLAGS += -fno-strict-aliasing
       LOCAL_CFLAGS += -fno-strict-aliasing
     endif
+
+    # these libs have fstrict-aliasing set locally but contain violations lolz
+    ifeq ($(LOCAL_MODULE),$(filter libpdfium libpdfiumcore libOmxVdec libOmxVenc,$(LOCAL_MODULE)))
+      LOCAL_CFLAGS += -Wno-error=strict-aliasing
+    endif
   endif
 
   ifeq ($(USE_LTO),true)

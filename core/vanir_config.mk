@@ -144,10 +144,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     libmusicbundle \
     libnfc-nci \
     libnvvisualizer \
-    libOmxVdec \
-    libOmxVenc \
-    libpdfium \
-    libpdfiumcore \
     libqcomvisualizer \
     libreverb \
     librtp_jni \
@@ -163,7 +159,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     libwebviewchromium \
     libwebviewchromium_loader \
     libwebviewchromium_plat_support \
-    libwilhelm \
     libziparchive-host \
     libziparchive \
     logd \
