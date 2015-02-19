@@ -105,7 +105,6 @@ ifeq ($(USE_LTO),true)
     dalvikvm64 \
     libart-gtest \
     libegl \
-    egl.cfg \
     libGLESv2 \
     libGLESv1_CM
 
