@@ -120,7 +120,7 @@ endif
 #
 # Style points will be assessed for tagging modules with their path for future fixing
 ifeq ($(USE_FSTRICT_FLAGS),true)
-  VANIR_FNO_STRICT_ALIASING_MODULES := \
+  EXODUS_FNO_STRICT_ALIASING_MODULES := \
     audio.primary.msm8960 \
     audio.primary.msm8974 \
     audio_policy.msm8610 \
@@ -130,7 +130,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     content_content_renderer_gyp \
     gatt_testtool \
     libdiskconfig \
-    libfdlibm \
     libft2 \
     libfusetwrp \
     libguitwrp \
@@ -149,7 +148,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     libstagefright_soft_h264dec \
     libtwrpmtp \
     libuclibcrpc \
-    libutils \
     libvisualizer \
     libwebviewchromium \
     libwebviewchromium_loader \
@@ -170,7 +168,7 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     third_party_WebKit_Source_platform_blink_platform_gyp
 
 # external/ffmpeg
-  VANIR_FNO_STRICT_ALIASING_MODULES += \
+  EXODUS_FNO_STRICT_ALIASING_MODULES += \
     libavcodec \
     libavformat \
     libavutil \
@@ -205,11 +203,11 @@ endif
 
 #======================================================================================================
 # variables as exported to other makefiles ============================================================
-VANIR_FSTRICT_OPTIONS := $(FSTRICT_FLAGS)
+EXODUS_FSTRICT_OPTIONS := $(FSTRICT_FLAGS)
 
 VANIR_GLOBAL_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 VANIR_RELEASE_CFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
-VANIR_CLANG_TARGET_GLOBAL_CFLAGS += $(VANIR_FSTRICT_OPTIONS) $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
+VANIR_CLANG_TARGET_GLOBAL_CFLAGS += $(EXODUS_FSTRICT_OPTIONS) $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 VANIR_GLOBAL_CPPFLAGS += $(DEBUG_SYMBOL_FLAGS) $(DEBUG_FRAME_POINTER_FLAGS)
 
 # set experimental/unsupported flags here for persistance and try to override local options that

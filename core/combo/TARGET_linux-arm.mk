@@ -78,7 +78,7 @@ $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb \
                         $(VANIR_THUMB_OPT_LEVEL) \
                         -fomit-frame-pointer \
                         -fno-strict-aliasing \
-                        $(VANIR_FSTRICT_OPTIONS) \
+                        $(EXODUS_FSTRICT_OPTIONS) \
                         $(VANIR_TARGET_THUMB_FLAGS)
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
@@ -114,7 +114,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			-I $(dir $(android_config_h)) \
 			$(DEBUG_SYMBOL_FLAGS) \
 			$(DEBUG_FRAME_POINTER_FLAGS) \
-			$(VANIR_FSTRICT_OPTIONS)
+			$(EXODUS_FSTRICT_OPTIONS)
 
 # The "-Wunused-but-set-variable" option often breaks projects that enable
 # "-Wall -Werror" due to a commom idiom "ALOGV(mesg)" where ALOGV is turned

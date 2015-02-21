@@ -223,8 +223,8 @@ ifeq ($(TARGET_CPU_ABI),)
 endif
 TARGET_CPU_ABI2 := $(strip $(TARGET_CPU_ABI2))
 
-# Include vanir variables
-include $(BUILD_SYSTEM)/vanir_config.mk
+# Include exodus variables
+include $(BUILD_SYSTEM)/exodus_config.mk
 
 # $(1): os/arch
 define select-android-config-h
