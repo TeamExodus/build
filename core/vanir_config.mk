@@ -128,7 +128,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     bluetooth.default \
     busybox \
     content_content_renderer_gyp \
-    dnsmasq \
     gatt_testtool \
     libdiskconfig \
     libfdlibm \
@@ -148,12 +147,9 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     librtp_jni \
     libssh \
     libstagefright_soft_h264dec \
-    libstlport \
-    libstlport_static \
     libtwrpmtp \
     libuclibcrpc \
     libutils \
-    libvariablespeed \
     libvisualizer \
     libwebviewchromium \
     libwebviewchromium_loader \
@@ -164,8 +160,6 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     mdnsd \
     mm-vdec-omx-test \
     net_net_gyp \
-    ping6 \
-    ping \
     sensors.$(TARGET_BOOTLOADER_BOARD_NAME) \
     ssh \
     static_busybox \
