@@ -97,7 +97,7 @@ else
   endif
 endif
 
-# Set the optional flags listed in $(BUILD_SYSTEM)/vanir_config.mk.
+# Set the optional flags listed in $(BUILD_SYSTEM)/exodus_config.mk.
 ifndef LOCAL_IS_HOST_MODULE
   ifdef ($(USE_BINARY_FLAGS),true)
     LOCAL_CFLAGS += $(call cc-option,$(VANIR_BINARY_CFLAG_OPTIONS))
@@ -121,9 +121,9 @@ ifndef LOCAL_IS_HOST_MODULE
   endif
 
   ifeq ($(USE_LTO),true)
-    ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(VANIR_LTO_MODULES)))
-      LOCAL_CFLAGS += $(call cc-option,$(VANIR_LTO_FLAGS))
-      LOCAL_LDFLAGS += $(call cc-option,$(VANIR_LTO_FLAGS))
+    ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(EXODUS_LTO_MODULES)))
+      LOCAL_CFLAGS += $(call cc-option,$(EXODUS_LTO_FLAGS))
+      LOCAL_LDFLAGS += $(call cc-option,$(EXODUS_LTO_FLAGS))
     endif
   endif
 endif

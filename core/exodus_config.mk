@@ -94,24 +94,25 @@ endif
 
 # Assign modules to build with link time optimizations using VANIR_LTO_MODULES.
 ifeq ($(USE_LTO),true)
-  VANIR_LTO_MODULES := \
+  EXODUS_LTO_MODULES := \
     core.art \
+    dalvikvm \
+    dalvikvm32 \
+    dalvikvm64 \
     libart \
     libart-compiler \
     libartd \
     libartd-compiler \
     libart-disassembler \
     libartd-disassembler \
-    libsigchain \
-    dalvikvm \
-    dalvikvm32 \
-    dalvikvm64 \
     libart-gtest \
-    libegl \
+    libEGL \
+    libGLES_android \
+    libGLESv1_CM \
     libGLESv2 \
-    libGLESv1_CM
+    libsigchain
 
-  VANIR_LTO_FLAGS := \
+  EXODUS_LTO_FLAGS := \
     -flto \
     -fuse-linker-plugin \
     $(DEBUG_SYMBOL_FLAGS)
