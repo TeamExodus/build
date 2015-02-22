@@ -28,6 +28,7 @@
 # USE_FSTRICT_FLAGS := true builds with fstrict-aliasing (thumb and arm)
 # USE_BINARY_FLAGS := true adds experimental binary flags that can be set here or in device trees
 # USE_EXTRA_CLANG_FLAGS := true allows additional flags to be passed to the Clang compiler
+# EXODUS_BIONIC_OPTIMIZATIONS := true switches to Nvidia routines in libm and dlmalloc in libc
 # ADDITIONAL_TARGET_ARM_OPT := Additional flags may be appended here for GCC-specific modules
 # ADDITIONAL_TARGET_THUMB_OPT := Additional flags may be appended here for GCC-specific modules
 # VANIR_ARM_OPT_LEVEL := -Ox for TARGET_arm_CFLAGS, preserved in binary.mk
@@ -44,6 +45,7 @@ USE_LTO                     ?= true
 USE_FSTRICT_FLAGS           ?= true
 USE_BINARY_FLAGS            ?=
 USE_EXTRA_CLANG_FLAGS       ?=
+EXODUS_BIONIC_OPTIMIZATIONS ?= true
 ADDITIONAL_TARGET_ARM_OPT   ?=
 ADDITIONAL_TARGET_THUMB_OPT ?=
 
@@ -62,6 +64,7 @@ ifeq ($(BONE_STOCK),true)
   USE_FSTRICT_FLAGS       :=
   USE_BINARY_FLAGS        :=
   USE_EXTRA_CLANG_FLAGS   :=
+  EXODUS_BIONIC_OPTIMIZATIONS :=
   VANIR_ARM_OPT_LEVEL     := -O2
   VANIR_THUMB_OPT_LEVEL   := -Os
   FSTRICT_ALIASING_WARNING_LEVEL := 2
