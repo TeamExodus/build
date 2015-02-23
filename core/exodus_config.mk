@@ -131,6 +131,7 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     AudioHardwareALSA \
     bluetooth.default \
     busybox \
+    camera.msm8084 \
     content_content_renderer_gyp \
     gatt_testtool \
     libdiskconfig \
