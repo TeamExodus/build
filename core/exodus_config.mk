@@ -46,10 +46,10 @@ USE_LTO                     ?= true
 USE_FSTRICT_FLAGS           ?= true
 USE_BINARY_FLAGS            ?=
 USE_EXTRA_CLANG_FLAGS       ?=
+USE_FDO_OPTIMIZATION        ?=
 EXODUS_BIONIC_OPTIMIZATIONS ?= true
 ADDITIONAL_TARGET_ARM_OPT   ?=
 ADDITIONAL_TARGET_THUMB_OPT ?=
-USE_FDO_OPTIMIZATION        ?= true
 
 # Set some defaults
 VANIR_ARM_OPT_LEVEL         ?= -O2
@@ -101,6 +101,27 @@ ifeq ($(USE_LTO),true)
     -Wl,-flto \
     -Wl,-fuse-linker-plugin \
     -Wl,-flto-report
+endif
+
+# profile-directed optimization
+ifeq ($(USE_FDO_OPTIMIZATION),true)
+  EXODUS_FDO_MODULES :=
+  EXODUS_FDO_BLACKLIST := \
+    libwebviewchromium \
+    third_party_WebKit_Source_wtf_wtf_gyp \
+    v8_tools_gyp_v8_base_gyp \
+    v8_tools_gyp_v8_base_arm_host_gyp \
+    third_party_sqlite_sqlite_gyp \
+    third_party_qcms_qcms_gyp \
+    third_party_ots_ots_gyp \
+    base_base_i18n_gyp \
+    v8_tools_gyp_v8_libbase_gyp \
+    v8_tools_gyp_v8_snapshot_gyp \
+    skia_skia_library_gyp \
+    skia_skia_opts_gyp \
+    skia_skia_opts_neon_gyp \
+    skia_skia_chrome_gyp
+    
 endif
 
 # fstrict-aliasing. Thumb is defaulted off for AOSP. Use VANIR_SPECIAL_CASE_MODULES to
