@@ -40,7 +40,7 @@ ifeq ($(USE_FDO_OPTIMIZATION),true)
       -Wcoverage-mismatch \
       -Wno-error
 
-  ifneq ($(wildcard $(DEVICE_PROFILE),)
+  ifeq ($(wildcard $(DEVICE_PROFILE),)
     # Generate FDO instrumentation for the target device
     $(combo_2nd_arch_prefix)TARGET_FDO_CFLAGS := -fprofile-generate=/media/primedirective/profile -DANDROID_FDO
     $(combo_2nd_arch_prefix)TARGET_FDO_LDFLAGS := -lgcov -lgcc
