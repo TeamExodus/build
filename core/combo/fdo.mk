@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 The Android Open Source Project
+# Copyright (C) 2015 Exodus && The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +15,45 @@
 #
 
 # Setup FDO related flags.
-
 $(combo_2nd_arch_prefix)TARGET_FDO_CFLAGS:=
 
+# EXODUS
+ifeq ($(USE_FDO_OPTIMIZATION),true)
+  DEVICE_PROFILE := /.exodus_profiles/$(PRODUCT_OUT)/$(TARGET_$(combo_2nd_arch_prefix)ARCH)/$(TARGET_$(combo_2nd_arch_prefix)ARCH_VARIANT)/profile)
+
+  # Available optimizations
+  SAMPLE_PROFILE_FLAGS := \
+      -fbranch-probabilities \
+      -fvpt -funroll-loops \
+      -fpeel-loops \
+      -ftracer \
+      -ftree-vectorize \
+      -finline-functions \
+      -fipa-cp \
+      -fipa-cp-clone \
+      -fpredictive-commoning \
+      -funswitch-loops \
+      -fgcse-after-reload \
+      -ftree-loop-distribute-patterns \
+      -fprofile-correction \
+      -DANDROID_FDO \
+      -Wcoverage-mismatch \
+      -Wno-error
+
+  ifneq ($(wildcard $(DEVICE_PROFILE),)
+    # Generate FDO instrumentation for the target device
+    $(combo_2nd_arch_prefix)TARGET_FDO_CFLAGS := -fprofile-generate=/media/primedirective/profile -DANDROID_FDO
+    $(combo_2nd_arch_prefix)TARGET_FDO_LDFLAGS := -lgcov -lgcc
+  else
+    # Compile with profile-guided optimizations
+    $(combo_2nd_arch_prefix)TARGET_FDO_CFLAGS := \
+        -fprofile-use=$(DEVICE_PROFILE) \
+        $(SAMPLE_PROFILE_FLAGS)
+  endif
+endif
+
+else
+# AOSP
 ifeq ($(strip $(BUILD_FDO_INSTRUMENT)), true)
   # Set BUILD_FDO_INSTRUMENT=true to turn on FDO instrumentation.
   # The profile will be generated on /sdcard/fdo_profile on the device.
@@ -36,4 +72,5 @@ else
       $(warning Profile directory $($(combo_2nd_arch_prefix)TARGET_FDO_PROFILE_PATH)/$(PRODUCT_OUT) does not exist. Turn off FDO.)
     endif
   endif
+endif
 endif

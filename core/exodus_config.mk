@@ -35,6 +35,7 @@
 # VANIR_THUMB_OPT_LEVEL := -Ox for TARGET_thumb_CFLAGS, preserved in binary.mk
 # FSTRICT_ALIASING_WARNING_LEVEL := 0-3 for the level of intensity the compiler checks for violations
 # USE_LTO := true builds locally in modules with the -flto flags set in this config file
+# USE_FDO_OPTIMIZATION := true to use feedback directed optimization on locally enabled modules
 
 # SET GLOBAL CONFIGURATION HERE:
 MAXIMUM_OVERDRIVE           ?= true
@@ -48,6 +49,7 @@ USE_EXTRA_CLANG_FLAGS       ?=
 EXODUS_BIONIC_OPTIMIZATIONS ?= true
 ADDITIONAL_TARGET_ARM_OPT   ?=
 ADDITIONAL_TARGET_THUMB_OPT ?=
+USE_FDO_OPTIMIZATION        ?= true
 
 # Set some defaults
 VANIR_ARM_OPT_LEVEL         ?= -O2
@@ -64,6 +66,7 @@ ifeq ($(BONE_STOCK),true)
   USE_FSTRICT_FLAGS       :=
   USE_BINARY_FLAGS        :=
   USE_EXTRA_CLANG_FLAGS   :=
+  USE_FDO_OPTIMIZATION    :=
   EXODUS_BIONIC_OPTIMIZATIONS :=
   VANIR_ARM_OPT_LEVEL     := -O2
   VANIR_THUMB_OPT_LEVEL   := -Os
@@ -95,9 +98,9 @@ endif
 # Assign modules to build with link time optimizations using VANIR_LTO_MODULES.
 ifeq ($(USE_LTO),true)
   EXODUS_LTO_FLAGS := \
-    -flto \
-    -fuse-ld=gold \
-    -flto-report
+    -Wl,-flto \
+    -Wl,-fuse-linker-plugin \
+    -Wl,-flto-report
 endif
 
 # fstrict-aliasing. Thumb is defaulted off for AOSP. Use VANIR_SPECIAL_CASE_MODULES to
