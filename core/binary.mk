@@ -211,6 +211,7 @@ my_compiler_dependencies :=
 ####################################################
 ## Add FDO flags if FDO is turned on and supported
 ####################################################
+ifeq ($(USE_FDO_OPTIMIZATION),true)
 ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(EXODUS_FDO_MODULES)))
   LOCAL_FDO_SUPPORT := true
 endif
@@ -221,6 +222,7 @@ ifneq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(EXODUS_FDO_BLACKLIST)))
       my_ldflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_LDFLAGS)
     endif
   endif
+endif
 endif
 
 ###########################################################
