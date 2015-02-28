@@ -152,6 +152,7 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
     libmusicbundle \
     libnfc-nci \
     libnvvisualizer \
+    libOMX.Exynos.VP8.Decoder \
     libqcomvisualizer \
     libreverb \
     librtp_jni \
