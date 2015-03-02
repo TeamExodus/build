@@ -50,7 +50,18 @@ $(combo_var_prefix)HAVE_STRLCAT := 0
 $(combo_var_prefix)HAVE_KERNEL_MODULES := 0
 
 $(combo_var_prefix)GLOBAL_CFLAGS := $(VANIR_GLOBAL_CFLAGS) -fno-exceptions -Wno-multichar
-$(combo_var_prefix)RELEASE_CFLAGS := $(VANIR_ARM_OPT_LEVEL) $(VANIR_RELEASE_CFLAGS) -fno-strict-aliasing
+$(combo_var_prefix)RELEASE_CFLAGS := $(VANIR_ARM_OPT_LEVEL) $(VANIR_RELEASE_CFLAGS)
+
+ifneq ($(EXODUS_FSTRICT_OPTIONS),)
+  ifeq ($(combo_target),HOST_)
+    $(combo_var_prefix)RELEASE_CFLAGS += -fno-strict-aliasing
+  else
+    $(combo_var_prefix)RELEASE_CFLAGS += $(EXODUS_FSTRICT_OPTIONS)
+  endif
+else
+  $(combo_var_prefix)RELEASE_CFLAGS += -fno-strict-aliasing
+endif
+
 $(combo_var_prefix)GLOBAL_CPPFLAGS := $(VANIR_GLOBAL_CPPFLAGS)
 $(combo_var_prefix)GLOBAL_LDFLAGS := -Wl,--as-needed -Wl,--relax -Wl,-S -Wl,--gc-sections -Wl,-s
 $(combo_var_prefix)GLOBAL_ARFLAGS := crsPD
