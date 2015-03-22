@@ -18,6 +18,7 @@ echo "ro.build.host=`hostname`"
 echo "ro.build.tags=$BUILD_VERSION_TAGS"
 echo "ro.product.brand=$PRODUCT_BRAND"
 echo "ro.product.name=$PRODUCT_NAME"
+echo "ro.product.device=$TARGET_DEVICE"
 echo "ro.product.board=$TARGET_BOOTLOADER_BOARD_NAME"
 
 # These values are deprecated, use "ro.product.cpu.abilist"
