@@ -5,6 +5,7 @@ ifneq (,$(filter denver64,$(TARGET_CPU_VARIANT)))
 
 arch_variant_cflags := \
     -mcpu=cortex-a57 \
-    -march=armv8-a
+    -mtune=cortex-a57 \
+    -march=armv8-a 
 
 endif
