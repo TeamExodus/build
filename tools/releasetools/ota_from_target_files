@@ -592,8 +592,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("  / /____>  </ /_/ / /_/ / /_/ (__  )  ")
   script.Print(" /_____/_/|_|\____/\__,_/\__,_/____/   ")
   script.Print(" ")
-  script.Print("  Exodus Vanir - Android 5.0 ")
-  script.Print("    by PrimeDirective && Team Vanir ")
+  script.Print("   Team-Exodus - Android 5.0    ")
+  script.Print("    by PrimeDirective && Team Exodus   ")
   script.Print(" ")
 
   if block_based:
