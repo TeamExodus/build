@@ -17,7 +17,7 @@ ifneq (,$(filter cortex-a15 krait denver,$(TARGET_$(combo_2nd_arch_prefix)CPU_VA
 	arch_variant_cflags += -D__ARM_FEATURE_LPAE=1
 else
 ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a9)
-	arch_variant_cflags := -mcpu=cortex-a9 -mtune=cortex-a9 -mfpu=neon
+	arch_variant_cflags := -mcpu=cortex-a9 -mtune=cortex-a9 -mfpu=neon-fp16
 else
 ifneq (,$(filter cortex-a8 scorpion,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 	arch_variant_cflags := -mcpu=cortex-a8 -mtune=cortext-a8 -mfpu=neon
