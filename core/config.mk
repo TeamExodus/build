@@ -643,7 +643,7 @@ endif
 
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-$(eval include vendor/vanir/sepolicy/sepolicy.mk)
+$(eval include vendor/exodus/sepolicy/sepolicy.mk)
 
 include $(BUILD_SYSTEM)/kernel_config.mk # set meat and potatoes for dumpvar.mk
 

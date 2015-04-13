@@ -578,7 +578,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   script.ShowProgress(0.5, 0)
 
-  #says: VANIR
+  #says: EXODUS
   script.Print(" ")
   script.Print(" ")
   script.Print(" ")
@@ -692,10 +692,10 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
 
-  vanirinitlinks = []
-  vanirinitlinks.append(("/init.vanir.rc", "/init.cm.rc"))
-  vanirinitlinks.append(("/init.vanir.rc", "/system/etc/init.local.rc"))
-  script.MakeSymlinks(vanirinitlinks)
+  exodusinitlinks = []
+  exodusinitlinks.append(("/init.exodus.rc", "/init.cm.rc"))
+  exodusinitlinks.append(("/init.exodus.rc", "/system/etc/init.local.rc"))
+  script.MakeSymlinks(exodusinitlinks)
 
   device_specific.FullOTA_PostValidate()
 

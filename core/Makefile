@@ -1626,7 +1626,7 @@ INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 export OTA_PACKAGE_PATH :=$(INTERNAL_OTA_PACKAGE_TARGET)
 
 ifeq ($($(strip DHO_VENDOR)),)
-  DHO_VENDOR := vanir
+  DHO_VENDOR := exodus
 endif
 ifeq ($(strip $(FORCE_PRECOMPILED_DALVIK)), true)
   SQUISHER_ARGS := $(TARGET_BOARD_PLATFORM)
@@ -1687,14 +1687,14 @@ endif
 ifeq ($(USE_PREBUILT_CHROMIUM),1)
 ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
 	@echo "Running Chromium prebuilt setup script..."
-	$(hide) . $(TOPDIR)vendor/vanir/utils/chromium_prebuilt.sh $(TOP)
+	$(hide) . $(TOPDIR)vendor/exodus/utils/chromium_prebuilt.sh $(TOP)
 endif
 endif
 
 ifeq ($(CHANGELOG),true)
 # Generate changelog
 	@echo -e ${CL_GRN}"Generating Changelog"${CL_RST}
-	$(hide) ./vendor/vanir/utils/changelog.sh
+	$(hide) ./vendor/exodus/utils/changelog.sh
 	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(TARGET_PRODUCT)-$(ROM_VERSION).txt
 endif
 

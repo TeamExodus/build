@@ -41,11 +41,11 @@ EOF
     echo $A
 }
 
-# run a command inside all projects tracked on the vanir remote in the manifest
+# run a command inside all projects tracked on the exodus remote in the manifest
 function forall_vanir()
 {
   cd $ANDROID_BUILD_TOP
-  repo forall -r `repo forall -c '[ "$REPO_REMOTE" = "vanir" ] && echo ^$REPO_PATH\$'` -c "$@"
+  repo forall -r `repo forall -c '[ "$REPO_REMOTE" = "team-exodus" ] && echo ^$REPO_PATH\$'` -c "$@"
 }
 
 # Get the value of a build variable as an absolute path.
@@ -477,7 +477,7 @@ unset LUNCH_MENU_CHOICES
 function add_lunch_combo()
 {
     local new_combo=$1
-    if [[ $new_combo == vanir_* ]]; then
+    if [[ $new_combo == exodus_* ]]; then
         local c
         for c in ${LUNCH_MENU_CHOICES[@]} ; do
             if [ "$new_combo" = "$c" ] ; then
@@ -500,7 +500,7 @@ function print_lunch_menu()
     echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
     echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
     echo " "
-    echo "  Exodus Vanir - Android 5.0 "
+    echo "  Team Exodus - Android 5.0 "
     echo "    by PrimeDirective && Team Exodus "
     echo -en '\033[0m'" \n"
     echo "You're building on" $uname
@@ -518,8 +518,8 @@ function print_lunch_menu()
     local choice
     for choice in ${LUNCH_MENU_CHOICES[@]}
     do
-        if [[ $choice == vanir_* ]]; then
-            choice="${choice/vanir/exodus}"
+        if [[ $choice == exodus_* ]]; then
+            choice="${choice/exodus/exodus}"
         fi
         echo " $i. $choice "
         i=$(($i+1))
@@ -1837,7 +1837,7 @@ echo "   / __/ | |/_/ __ \/ __  / / / / ___/ "
 echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
 echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
 echo " "
-echo "  Exodus Vanir - Android 5.0 "
+echo "  Team Exodus - Android 5.0 "
 echo "    by PrimeDirective && Team Exodus "
 echo -en '\033[0m'" \n"
 
@@ -1867,13 +1867,6 @@ retval=0
             retval=$?
             ;;
     esac
-if [ ! $VANIR_DISABLE_BUILD_COMPLETION_NOTIFICATIONS ]; then
-    if [ $retval -eq 0 ]; then
-        notify-send "VANIR" "$TARGET_PRODUCT build completed." -i $T/build/buildwin.png -t 10000
-    else
-        notify-send "VANIR" "$TARGET_PRODUCT build FAILED." -i $T/build/buildfailed.png -t 10000
-    fi
-fi
 cd "$CWD"
 return $retval
 }
@@ -2251,4 +2244,4 @@ if [ `typeset -F | grep _git | wc -l` -eq 0 ]; then
     source $(gettop)/build/git-completion.bash
 fi
 export ANDROID_BUILD_TOP=$(gettop)
-export PATH=$ANDROID_BUILD_TOP/ccache:$PATH:$ANDROID_BUILD_TOP/vendor/vanir/scripts
+export PATH=$ANDROID_BUILD_TOP/ccache:$PATH:$ANDROID_BUILD_TOP/vendor/exodus/scripts
