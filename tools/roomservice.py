@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Copyright (C) 2012-2013, The CyanogenMod Project
+# Copyright (C) Team Exodus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ except:
     device = product
 
 if not depsonly:
-    print("Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device)
+    print("Device %s not found. Attempting to retrieve device repository from TeamExodus Github (http://github.com/TeamExodus)." % device)
 
 repositories = []
 
@@ -70,7 +71,7 @@ def add_auth(githubreq):
         githubreq.add_header("Authorization","Basic %s" % githubauth)
 
 if not depsonly:
-    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:CyanogenMod+in:name+fork:true" % device)
+    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:TeamExodus+in:name+fork:true" % device)
     add_auth(githubreq)
     try:
         result = json.loads(urllib.request.urlopen(githubreq).read().decode())
@@ -110,7 +111,7 @@ def indent(elem, level=0):
 
 def get_default_revision():
     m = ElementTree.parse(".repo/manifest.xml")
-    d = m.findall('default')[0]
+    d = m.findall('devices')[0]
     r = d.get('revision')
     return r.replace('refs/heads/', '').replace('refs/tags/', '')
 
@@ -122,9 +123,13 @@ def get_from_manifest(devicename):
         lm = ElementTree.Element("manifest")
 
     for localpath in lm.findall("project"):
-        if re.search("android_device_.*_%s$" % device, localpath.get("name")):
+        if re.search("device_.*_%s$" % device, localpath.get("name")):
             return localpath.get("path")
 
+    for localpath in lm.findall("project"):
+        if re.search("android_device_.*_%s$" % device, localpath.get("name")):
+            return localpath.get("path")
+            
     # Devices originally from AOSP are in the main manifest...
     try:
         mm = ElementTree.parse(".repo/manifest.xml")
@@ -133,12 +138,16 @@ def get_from_manifest(devicename):
         mm = ElementTree.Element("manifest")
 
     for localpath in mm.findall("project"):
-        if re.search("android_device_.*_%s$" % device, localpath.get("name")):
+        if re.search("device_.*_%s$" % device, localpath.get("name")):
             return localpath.get("path")
 
+    for localpath in mm.findall("project"):
+        if re.search("android_device_.*_%s$" % device, localpath.get("name")):
+            return localpath.get("path")
+            
     return None
 
-def is_in_manifest(projectname):
+def is_in_manifest(pathname):
     try:
         lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
         lm = lm.getroot()
@@ -146,7 +155,7 @@ def is_in_manifest(projectname):
         lm = ElementTree.Element("manifest")
 
     for localpath in lm.findall("project"):
-        if localpath.get("name") == projectname:
+        if localpath.get("path") == pathname:
             return 1
 
     ## Search in main manifest, too
@@ -157,12 +166,12 @@ def is_in_manifest(projectname):
         lm = ElementTree.Element("manifest")
 
     for localpath in lm.findall("project"):
-        if localpath.get("name") == projectname:
+        if localpath.get("path") == pathname:
             return 1
 
     return None
 
-def add_to_manifest(repositories, fallback_branch = None):
+def add_to_manifest(repositories, fallback_branch = None,remote_name= "locals",repo_dev="TeamExodus"):
     try:
         lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
         lm = lm.getroot()
@@ -172,13 +181,18 @@ def add_to_manifest(repositories, fallback_branch = None):
     for repository in repositories:
         repo_name = repository['repository']
         repo_target = repository['target_path']
+        repo_dname = repo_dev
+        if repo_dname<>"":
+            repo_dname = repo_dname+"/"
+        repo_dname = repo_dname + repo_name
+        
         if exists_in_tree(lm, repo_name):
-            print('CyanogenMod/%s already exists' % (repo_name))
+            print('%s already exists' % (repo_name))
             continue
 
-        print('Adding dependency: CyanogenMod/%s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: %s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "github", "name": "CyanogenMod/%s" % repo_name })
+            "remote": remote_name, "name": repo_dname})
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -200,16 +214,17 @@ def add_to_manifest(repositories, fallback_branch = None):
 
 def fetch_dependencies(repo_path, fallback_branch = None):
     print('Looking for dependencies')
-    dependencies_path = repo_path + '/cm.dependencies'
     syncable_repos = []
-
+    dependencies_path = repo_path + '/exodus.dependencies'
+    
     if os.path.exists(dependencies_path):
         dependencies_file = open(dependencies_path, 'r')
         dependencies = json.loads(dependencies_file.read())
         fetch_list = []
 
         for dependency in dependencies:
-            if not is_in_manifest("CyanogenMod/%s" % dependency['repository']):
+            print('Found : %s' % dependency['target_path'])
+            if not is_in_manifest(dependency['target_path']):
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
 
@@ -218,9 +233,27 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         if len(fetch_list) > 0:
             print('Adding dependencies to manifest')
             add_to_manifest(fetch_list, fallback_branch)
-    else:
-        print('Dependencies file not found, bailing out.')
 
+    #Check for CM Dependencies too
+    dependencies_path = repo_path + '/cm.dependencies'
+    if os.path.exists(dependencies_path):
+        print("Importing cm dependencies")
+        dependencies_file = open(dependencies_path, 'r')
+        dependencies = json.loads(dependencies_file.read())
+        fetch_list = []
+
+        for dependency in dependencies:
+            print('Found : %s' % dependency['target_path'])
+            if not is_in_manifest(dependency['target_path']):
+                fetch_list.append(dependency)
+                syncable_repos.append(dependency['target_path'])
+
+        dependencies_file.close()
+
+        if len(fetch_list) > 0:
+            print('Adding dependencies to manifest')
+            add_to_manifest(fetch_list, fallback_branch,"cm","")           
+            
     if len(syncable_repos) > 0:
         print('Syncing dependencies')
         os.system('repo sync %s' % ' '.join(syncable_repos))
@@ -243,10 +276,10 @@ if depsonly:
 else:
     for repository in repositories:
         repo_name = repository['name']
-        if repo_name.startswith("android_device_") and repo_name.endswith("_" + device):
+        if repo_name.startswith("device_") and repo_name.endswith("_" + device):
             print("Found repository: %s" % repository['name'])
             
-            manufacturer = repo_name.replace("android_device_", "").replace("_" + device, "")
+            manufacturer = repo_name.replace("device_", "").replace("_" + device, "")
             
             default_revision = get_default_revision()
             print("Default revision: %s" % default_revision)
@@ -292,4 +325,4 @@ else:
             print("Done")
             sys.exit()
 
-print("Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
+print("Repository for %s not found in the TeamExodus Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)

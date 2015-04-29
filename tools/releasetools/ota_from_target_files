@@ -576,6 +576,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
+  script.Print("     ______               __           ")
+  script.Print("    / ____/  ______  ____/ /_  _______ ")
+  script.Print("   / __/ | |/_/ __ \/ __  / / / / ___/ ")
+  script.Print("  / /____>  </ /_/ / /_/ / /_/ (__  )  ")
+  script.Print(" /_____/_/|_|\____/\__,_/\__,_/____/   ")
+  script.Print(" ")
+  script.Print("  Exodus Vanir - Android 5.1 ")
+  script.Print("    by PrimeDirective && Team Exodus ")  
+  
   CopyInstallTools(output_zip)
   script.UnpackPackageDir("install", "/tmp/install")
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
