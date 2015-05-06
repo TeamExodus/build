@@ -237,7 +237,6 @@ def fetch_dependencies(repo_path, fallback_branch = None):
     #Check for CM Dependencies too
     dependencies_path = repo_path + '/cm.dependencies'
     if os.path.exists(dependencies_path):
-        print("Importing cm dependencies")
         dependencies_file = open(dependencies_path, 'r')
         dependencies = json.loads(dependencies_file.read())
         fetch_list = []
@@ -253,6 +252,25 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         if len(fetch_list) > 0:
             print('Adding dependencies to manifest')
             add_to_manifest(fetch_list, fallback_branch,"cm","")           
+
+    #Check for vendor Dependencies too
+    dependencies_path = repo_path + '/vendor.dependencies'
+    if os.path.exists(dependencies_path):
+        dependencies_file = open(dependencies_path, 'r')
+        dependencies = json.loads(dependencies_file.read())
+        fetch_list = []
+
+        for dependency in dependencies:
+            print('Found : %s' % dependency['target_path'])
+            if not is_in_manifest(dependency['target_path']):
+                fetch_list.append(dependency)
+                syncable_repos.append(dependency['target_path'])
+
+        dependencies_file.close()
+
+        if len(fetch_list) > 0:
+            print('Adding dependencies to manifest')
+            add_to_manifest(fetch_list, fallback_branch,"vendors","")           
             
     if len(syncable_repos) > 0:
         print('Syncing dependencies')
