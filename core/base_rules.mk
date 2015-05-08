@@ -210,11 +210,7 @@ ifneq (true,$(LOCAL_UNINSTALLABLE_MODULE))
   # Apk and its attachments reside in its own subdir.
   ifeq ($(LOCAL_MODULE_CLASS),APPS)
   # framework-res.apk doesn't like the additional layer.
-  ifeq ($(LOCAL_NO_STANDARD_LIBRARIES),true)
-  # Neither do Runtime Resource Overlay apks, which contain just the overlaid resources.
-  else ifeq ($(LOCAL_IS_RUNTIME_RESOURCE_OVERLAY),true)
-  else ifeq ($(LOCAL_IGNORE_SUBDIR),true)
-  else
+  ifeq ($(filter true,$(LOCAL_NO_STANDARD_LIBRARIES) $(LOCAL_IGNORE_SUBDIR)),)
     my_module_path := $(my_module_path)/$(LOCAL_MODULE)
   endif
   endif
