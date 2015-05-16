@@ -22,5 +22,30 @@
 PRODUCT_PROPERTY_OVERRIDES := \
     keyguard.no_require_sim=true
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
+PRODUCT_PACKAGES := \
+    libfwdlockengine \
+    WAPPushManager
+
+# Additional settings used in all AOSP builds
+PRODUCT_PROPERTY_OVERRIDES := \
+    ro.com.android.dateformat=MM-dd-yyyy
+
+# Put en_US first in the list, so make it default.
+PRODUCT_LOCALES := en_US
+
+# Include drawables for all densities
+PRODUCT_AAPT_CONFIG := normal
+
+# Get some sounds
+$(call inherit-product-if-exists, frameworks/base/data/sounds/lollipop/AllExodusAudio.mk)
+
+# Get the TTS language packs
+$(call inherit-product-if-exists, external/svox/pico/lang/all_pico_languages.mk)
+
+# Get a list of languages.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/locales_full.mk)
+
+# Get everything else from the parent package
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_no_telephony.mk)
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
