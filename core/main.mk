@@ -70,7 +70,11 @@ $(DEFAULT_GOAL):
 FORCE:
 
 # check ccache version and build if necessary
+ifneq ($(DONT_BUILD_CCACHE),1)
 $(info $(shell build/tools/ccache_version_check.sh))
+else
+$(info you don't want to build ccache)
+endif
 
 # These goals don't need to collect and include Android.mks/CleanSpec.mks
 # in the source tree.
