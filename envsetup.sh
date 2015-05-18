@@ -2366,6 +2366,7 @@ function cmrebase() {
 }
 
 function mka() {
+    print_exodus_header
     case `uname -s` in
         Darwin)
             make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
