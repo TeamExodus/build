@@ -531,6 +531,25 @@ function brunch()
     return $?
 }
 
+function print_breakfast_devices()
+{
+    echo ""
+    echo "Team-Exodus build system"
+    echo "please choose from the following supported devices:"
+    while read combo
+    do
+        if [[ "$combo" =~ \#.* ]];then
+           echo $combo >null
+        else
+            combo=${combo#exodus_}
+            combo=${combo%-userdebug}
+            combo=${combo%-user}
+            combo=${combo%-eng}
+            echo $i $combo
+        fi
+    done <vendor/exodus/devices/exodus-build-targets
+}
+
 function breakfast()
 {
     target=$1
@@ -547,7 +566,7 @@ function breakfast()
 
     if [ $# -eq 0 ]; then
         # No arguments, so let's have the full menu
-        lunch
+        print_breakfast_devices
     else
         echo "z$target" | grep -q "-"
         if [ $? -eq 0 ]; then
