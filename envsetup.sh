@@ -491,13 +491,7 @@ add_lunch_combo aosp_x86_64-eng
 
 function print_lunch_menu()
 {
-    local uname=$(uname)
-    echo
-    echo "You're building on" $uname
-    if [ "$(uname)" = "Darwin" ] ; then
-       echo "  (ohai, koush!)"
-    fi
-    echo
+    print_exodus_header
     if [ "z${CM_DEVICES_ONLY}" != "z" ]; then
        echo "Breakfast menu... pick a combo:"
     else
@@ -531,11 +525,26 @@ function brunch()
     return $?
 }
 
+function print_exodus_header()
+{
+    local uname=$(uname)
+    echo "     ______               __           "
+    echo "    / ____/  ______  ____/ /_  _______ "
+    echo "   / __/ | |/_/ __ \/ __  / / / / ___/ "
+    echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
+    echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
+    echo " "
+    echo "  Team Exodus - Android 5.1" 
+    echo "    by PrimeDirective && Team Exodus "
+    echo "You're building on" $uname
+    echo
+}
+
 function print_breakfast_devices()
 {
-    echo ""
-    echo "Team-Exodus build system"
-    echo "please choose from the following supported devices:"
+    print_exodus_header
+    echo "please start brunch/breakfast with one of the following supported devices:"
+    local output=""
     while read combo
     do
         if [[ "$combo" =~ \#.* ]];then
@@ -545,9 +554,13 @@ function print_breakfast_devices()
             combo=${combo%-userdebug}
             combo=${combo%-user}
             combo=${combo%-eng}
-            echo $i $combo
+            echo -e "combo='${combo}'" >null
+            if [ -n "$combo" ]; then            
+                output="${output}${combo}."
+            fi
         fi
     done <vendor/exodus/devices/exodus-build-targets
+    echo $output | column -t -s.
 }
 
 function breakfast()
