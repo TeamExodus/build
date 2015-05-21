@@ -582,9 +582,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("  / /____>  </ /_/ / /_/ / /_/ (__  )  ")
   script.Print(" /_____/_/|_|\____/\__,_/\__,_/____/   ")
   script.Print(" ")
-  script.Print("  Exodus Vanir - Android 5.1 ")
-  script.Print("    by PrimeDirective && Team Exodus ")  
-  
+  script.Print("  Exodus - Android 5.1.1 ")
+  script.Print("    by PrimeDirective && Team Exodus ")
+
   CopyInstallTools(output_zip)
   script.UnpackPackageDir("install", "/tmp/install")
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
