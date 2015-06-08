@@ -185,9 +185,8 @@ def add_to_manifest(repositories, fallback_branch = None,remote_name= "locals",r
         if repo_dname<>"":
             repo_dname = repo_dname+"/"
         repo_dname = repo_dname + repo_name
-        
-        if exists_in_tree(lm, repo_name):
-            print('%s already exists' % (repo_name))
+        if os.path.exists(repo_target):
+            print('%s already exists' % (repo_target))
             continue
 
         print('Adding dependency: %s -> %s' % (repo_name, repo_target))
