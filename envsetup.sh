@@ -522,6 +522,14 @@ function brunch()
     return $?
 }
 
+function notifyCompleted()
+{
+    notify-send "EXODUS" "$TARGET_PRODUCT build completed." -i $(gettop)/build/metal.png -t 2000
+}
+function notifyFailed()
+{
+    notify-send "EXODUS" "$TARGET_PRODUCT build failure." -i $(gettop)/build/poo_man.png -t 2000
+}
 function print_exodus_header()
 {
     local uname=$(uname)
@@ -531,7 +539,7 @@ function print_exodus_header()
     echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
     echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
     echo " "
-    echo "  Team Exodus - Android 5.1" 
+    echo "  Team Exodus - Android 5.1.1" 
     echo "    by PrimeDirective && Team Exodus "
     echo "You're building on" $uname
     echo
@@ -2365,14 +2373,23 @@ function cmrebase() {
 
 function mka() {
     print_exodus_header
+    retval=0
     case `uname -s` in
         Darwin)
             make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            retval=$?
             ;;
         *)
-            mk_timer schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            time mk_timer schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            retval=$?
             ;;
     esac
+    if [ $retval -eq 0 ]; then
+        notifyCompleted
+    else
+        notifyFailed
+    fi
+    return $retval
 }
 
 function cmka() {
