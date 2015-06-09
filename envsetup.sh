@@ -532,6 +532,7 @@ function print_lunch_menu()
 
 function brunch()
 {
+	print_exodus_header
     breakfast $*
     if [ $? -eq 0 ]; then
         mka bacon
@@ -540,6 +541,30 @@ function brunch()
         return 1
     fi
     return $?
+}
+
+function notifyCompleted()
+{
+    notify-send "EXODUS" "$TARGET_PRODUCT build completed." -i $(gettop)/build/metal.png -t 2000
+}
+function notifyFailed()
+{
+    notify-send "EXODUS" "$TARGET_PRODUCT build failure." -i $(gettop)/build/poo_man.png -t 2000
+}
+function print_exodus_header()
+{
+    local uname=$(uname)
+    echo "     ______               __           "
+    echo "    / ____/  ______  ____/ /_  _______ "
+    echo "   / __/ | |/_/ __ \/ __  / / / / ___/ "
+    echo "  / /____>  </ /_/ / /_/ / /_/ (__  )  "
+    echo " /_____/_/|_|\____/\__,_/\__,_/____/   "
+    echo " "
+    echo "  Team Exodus - Android 5.1.1" 
+    echo "    by PrimeDirective && Team Exodus "
+    echo ""
+    echo "You're building on" $uname
+    echo
 }
 
 function breakfast()
@@ -2102,20 +2127,31 @@ function cmrebase() {
 }
 
 function mka() {
+	print_exodus_header
     local T=$(gettop)
+    retval=0
     if [ "$T" ]; then
         case `uname -s` in
             Darwin)
                 make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+                retval=$?
                 ;;
             *)
-                mk_timer schedtool -B -n 1 -e ionice -n 1 make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+                time mk_timer schedtool -B -n 1 -e ionice -n 1 make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+                retval=$?
                 ;;
         esac
 
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
     fi
+    
+    if [ $retval -eq 0 ]; then
+        notifyCompleted
+    else
+        notifyFailed
+    fi
+    return $retval
 }
 
 function cmka() {
