@@ -513,6 +513,8 @@ function print_lunch_menu()
 
 function brunch()
 {
+	CWD=$(pwd)
+    croot
     breakfast $*
     if [ $? -eq 0 ]; then
         mka bacon
@@ -520,6 +522,7 @@ function brunch()
         echo "No such item in brunch menu. Try 'breakfast'"
         return 1
     fi
+    cd "$CWD"
     return $?
 }
 
