@@ -70,13 +70,17 @@ $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
-                        -funswitch-loops
+                        -funswitch-loops \
+                        $(DEBUG_SYMBOL_FLAGS) \
+			            $(DEBUG_FRAME_POINTER_FLAGS)
 
 # Modules can choose to compile some source as thumb.
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
-                        -fno-strict-aliasing
+                        -fno-strict-aliasing \
+                        $(DEBUG_SYMBOL_FLAGS) \
+			            $(DEBUG_FRAME_POINTER_FLAGS)
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -108,7 +112,9 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			-fno-canonical-system-headers \
 			$(arch_variant_cflags) \
 			-include $(android_config_h) \
-			-I $(dir $(android_config_h))
+			-I $(dir $(android_config_h)) \
+			$(DEBUG_SYMBOL_FLAGS) \
+			$(DEBUG_FRAME_POINTER_FLAGS)
 
 # The "-Wunused-but-set-variable" option often breaks projects that enable
 # "-Wall -Werror" due to a commom idiom "ALOGV(mesg)" where ALOGV is turned
@@ -149,7 +155,9 @@ $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers
+			-frename-registers \
+			$(DEBUG_SYMBOL_FLAGS) \
+			$(DEBUG_FRAME_POINTER_FLAGS)
 
 libc_root := bionic/libc
 libm_root := bionic/libm

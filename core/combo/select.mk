@@ -49,10 +49,10 @@ $(combo_var_prefix)HAVE_STRLCPY := 0
 $(combo_var_prefix)HAVE_STRLCAT := 0
 $(combo_var_prefix)HAVE_KERNEL_MODULES := 0
 
-$(combo_var_prefix)GLOBAL_CFLAGS := -fno-exceptions -Wno-multichar
-$(combo_var_prefix)RELEASE_CFLAGS := -O2 -g -fno-strict-aliasing
-$(combo_var_prefix)GLOBAL_CPPFLAGS :=
-$(combo_var_prefix)GLOBAL_LDFLAGS :=
+$(combo_var_prefix)GLOBAL_CFLAGS := -fno-exceptions -Wno-multichar $(EXODUS_GLOBAL_CFLAGS)
+$(combo_var_prefix)RELEASE_CFLAGS := -O2 -g -fno-strict-aliasing $(EXODUS_RELEASE_CFLAGS)
+$(combo_var_prefix)GLOBAL_CPPFLAGS := $(EXODUS_GLOBAL_CPPFLAGS)
+$(combo_var_prefix)GLOBAL_LDFLAGS := $(EXODUS_LD_FLAGS)
 $(combo_var_prefix)GLOBAL_ARFLAGS := crsPD
 $(combo_var_prefix)GLOBAL_LD_DIRS :=
 

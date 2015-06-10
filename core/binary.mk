@@ -97,6 +97,13 @@ else
   endif
 endif
 
+ifndef LOCAL_IS_HOST_MODULE
+  LOCAL_CFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
+  LOCAL_CPPFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
+  LOCAL_LDFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
+  LOCAL_ASFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
+endif
+
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
