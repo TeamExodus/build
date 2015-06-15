@@ -171,8 +171,9 @@ endef
 #
 define inherit-product
   $(foreach v,$(_product_var_list), \
-      $(call inherit-product_append-var,$(v),$(1))) \
-  $(call inherit-product_track-node,$(1))
+      $(eval rep := $(subst vendor/cm/,vendor/exodus/,$(1))) \
+      $(call inherit-product_append-var,$(v),$(rep))) \
+  $(call inherit-product_track-node,$(rep))
 endef
 
 #
