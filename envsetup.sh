@@ -2441,6 +2441,7 @@ DIR=$OUT
 	echo $CL_YLW" Already" $CL_RED" SMASHED it !!!" $CL_RST
 	echo ""
 	fi
+}
 
 function repolastsync() {
     RLSPATH="$ANDROID_BUILD_TOP/.repo/.repo_fetchtimes.json"
