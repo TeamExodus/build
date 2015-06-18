@@ -79,6 +79,7 @@ $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
                         -fno-strict-aliasing \
+                        $(EXODUS_FSTRICT_OPTIONS) \
                         $(DEBUG_SYMBOL_FLAGS) \
 			            $(DEBUG_FRAME_POINTER_FLAGS)
 
@@ -113,6 +114,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			$(arch_variant_cflags) \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h)) \
+			$(EXODUS_FSTRICT_OPTIONS) \
 			$(DEBUG_SYMBOL_FLAGS) \
 			$(DEBUG_FRAME_POINTER_FLAGS)
 

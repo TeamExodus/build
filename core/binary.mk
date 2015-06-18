@@ -102,6 +102,20 @@ ifndef LOCAL_IS_HOST_MODULE
   LOCAL_CPPFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
   LOCAL_LDFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
   LOCAL_ASFLAGS += $(call cc-option,$(EXODUS_GLOBAL_CFLAGS))
+
+  # Workaround issues with fstrict-aliasing until properly fixed.
+  ifeq ($(USE_FSTRICT_FLAGS),true)
+    ifeq ($(LOCAL_MODULE),$(filter $(LOCAL_MODULE),$(EXODUS_FNO_STRICT_ALIASING_MODULES)))
+      LOCAL_CONLYFLAGS += -fno-strict-aliasing
+      LOCAL_CPPFLAGS += -fno-strict-aliasing
+      LOCAL_CFLAGS += -fno-strict-aliasing
+    endif
+
+    # these libs have fstrict-aliasing set locally but contain violations lolz
+    ifeq ($(LOCAL_MODULE),$(filter libpdfium libpdfiumcore libOmxVdec libOmxVenc,$(LOCAL_MODULE)))
+      LOCAL_CFLAGS += -Wno-error=strict-aliasing
+    endif
+  endif
 endif
 
 # The following LOCAL_ variables will be modified in this file.
