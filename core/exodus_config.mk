@@ -76,7 +76,8 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
           libwilhelm \
           libdownmix \
           lsof \
-          tcpdump
+          tcpdump \
+          libqsap_sdk
 
   EXODUS_FNO_STRICT_ALIASING_MODULES += \
       audio.primary.msm8960 \
