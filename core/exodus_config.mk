@@ -77,6 +77,7 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
           libdownmix \
           lsof \
           tcpdump \
+          libOMX.Exynos.AVC.Decoder \
           libqsap_sdk
 
   EXODUS_FNO_STRICT_ALIASING_MODULES += \
