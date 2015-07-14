@@ -78,7 +78,11 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
           lsof \
           tcpdump \
           libOMX.Exynos.AVC.Decoder \
-          libqsap_sdk
+          libqsap_sdk \
+          libtee_client_api_driver \
+          tf_daemon \
+          libasound \
+          libdomx
 
   EXODUS_FNO_STRICT_ALIASING_MODULES += \
       audio.primary.msm8960 \
