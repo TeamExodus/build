@@ -78,6 +78,9 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
           lsof \
           tcpdump \
           libOMX.Exynos.AVC.Decoder \
+          libOMX.Exynos.AVC.Encoder \
+          libOMX.Exynos.MPEG4.Decoder \
+          libOMX.Exynos.MPEG4.Encoder \
           libqsap_sdk \
           libtee_client_api_driver \
           tf_daemon \
@@ -85,7 +88,7 @@ ifeq ($(USE_FSTRICT_FLAGS),true)
           libdomx
 
   EXODUS_FNO_STRICT_ALIASING_MODULES += \
-      audio.primary.msm8960 \
+    audio.primary.msm8960 \
     audio.primary.msm8974 \
     audio_policy.msm8610 \
     bluetooth.default \
