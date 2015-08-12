@@ -42,6 +42,7 @@ ifeq "" "$(PLATFORM_VERSION)"
   # Update this value when the platform version changes (rather
   # than overriding it somewhere else).  Can be an arbitrary string.
   PLATFORM_VERSION := 5.1.1
+  PLATFORM_RELEASE_VERSION := android-5.1.1_r13
 endif
 
 ifeq "" "$(PLATFORM_SDK_VERSION)"
