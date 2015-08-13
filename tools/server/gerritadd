@@ -1,0 +1,12 @@
+CWD=$(pwd)
+gitp=$1.git
+cd ~/gerrit/git
+if [ -d ${gitp} ]; then
+ echo "removing old version of ${gitp}"
+  rm -rf ${gitp}
+fi
+git clone --mirror git@github.com:TeamExodus/${gitp}
+cd ${gitp}
+git fetch
+cd "$CWD"
+gerritflushcache

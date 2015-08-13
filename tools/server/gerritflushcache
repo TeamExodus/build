@@ -1,0 +1,2 @@
+ssh -p 29418 ${GERRIT_USER}@exodus-developers.net gerrit flush-caches
+

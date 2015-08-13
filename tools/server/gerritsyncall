@@ -1,0 +1,1 @@
+find ~/gerrit/git -maxdepth 1 -type d -not -path ~/gerrit/git -not -path "~/gerrit/git/All-*" -exec bash -c "echo '{}' && cd '{}' && git fetch" \;

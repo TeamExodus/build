@@ -1,0 +1,2 @@
+echo "pushing with ${GERRIT_USER} to $1 for branch $2"
+git push ssh://${GERRIT_USER}@exodus-developers.net:29418/$1 HEAD:$2

@@ -1,0 +1,5 @@
+mkdir ~/merges
+while read dir; do
+  mergeadd $dir
+done <$1
+

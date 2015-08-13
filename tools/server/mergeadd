@@ -1,0 +1,17 @@
+
+CWD=$(pwd)
+cd ~/merges
+git clone git@github.com:TeamExodus/$1
+result=$?
+if [ $result -eq 0 ]; then
+    cd $1
+    git remote add cm git@github.com:CyanogenMod/android_$1
+    result=$?
+    if  [ $result -eq 0 ]; then
+        git fetch cm
+        result=$?
+    fi
+fi
+result=$?
+cd "$CWD"
+exit $result
