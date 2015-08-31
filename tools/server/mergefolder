@@ -1,0 +1,19 @@
+CWD=$(pwd)
+dir=$1
+echo "merging ${dir}"
+cd ~/merges/$dir
+git fetch cm > ~/fetch_cm 2>&1
+if  grep -q 'cm/cm-12.1' ~/fetch_cm ; then
+    git fetch && git checkout origin/EXODUS-5.1
+    result=$(git merge cm/cm-12.1 --no-ff --no-edit)
+    if [ $? -ne 0 ] ; then
+        echo "merge for ${dir} failed"
+        exit 1
+    fi
+    echo $result
+    if [[ $result != "Already up-to-date." ]]; then 
+        git push ssh://${GERRIT_USER}@exodus-developers.net:29418/${dir} HEAD:EXODUS-5.1
+    fi
+fi
+rm ~/fetch_cm
+cd "$CWD"
