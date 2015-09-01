@@ -1,12 +1,29 @@
 CWD=$(pwd)
-echo 'start merging'
 cd ~/merges
-for dir in */; do
-    mergefolder ${dir}
-    if [ $? -ne 0 ] ; then
-        exit 1
-    fi
+if [ ! -e ~/folders_to_merge ] ; then
+	echo 'start merging'
+    ls >~/folders_to_merge
+	echo '###' >~/folders_merged
+else
+	echo 'continue merging'
+fi
+if [ ! -e ~/folders_merged ] ; then
+	echo '###' >~/folders_merged
+fi
+IFS=$'\n'
+for dir in $(cat ~/folders_to_merge)
+do
+	if ! grep -q $dir ~/folders_merged ; then
+		echo ${dir} >>~/folders_merged
+		mergefolder ${dir}
+		if [ $? -ne 0 ] ; then
+			exit 1
+		fi
+	fi
 done
 result=$?
+rm ~/folders_merged
+rm ~/folders_to_merge
+echo 'all merges done !'
 cd "$CWD"
 exit $result
