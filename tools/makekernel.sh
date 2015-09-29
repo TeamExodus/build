@@ -3,13 +3,16 @@
 ## A simple build tool to compile the kernel from the custom rom source root ##
 ## The output file is located in the TARGET_DEVICE product /out directory    ##
 ## named $(TARGET_DEVICE)_kernel.zip.  This script will automatically create ##
-## a subtree of Koush's AnyKernel formatting tool to be used in the process  ##
-## which is located at https://github.com/koush/AnyKernel                    ##
+## a subtree of our AnyKernel formatting tool to be used in the process      ##
+## which is located at https://github.com/TeamExodus/AnyKernel2/             ##
 ##                                                                           ##
 ## Dave Kessler <activethrasher00@gmail.com>                                 ##
 ## github: AlmightyMegadeth00                                                ##
 ## Written for Vanir-Exodus 1/11/15                                          ##
 ##                                                                           ##
+## Alex Naidis <alex.naidis@linux.com>                                       ##
+## github: TheCrazyLex                                                       ##
+## Updated for Exodus September 2015                                         ##
 ###############################################################################
 
 CL_YLW="\033[33m"
@@ -22,6 +25,9 @@ DATE=`date +%m%d%Y`
 CORES=`nproc --all`
 SET_CORES="-j$CORES"
 
+export KBUILD_BUILD_USER=Reactor
+export KBUILD_BUILD_HOST=Exodus
+
 # Inherited build variables
 DEVICE=$1
 TOOLCHAIN=$2
@@ -31,13 +37,13 @@ TARGET_KERNEL_CONFIG=$4
 # Directories
 T=$PWD
 OUT=$T/out/target/product/$DEVICE
-ANYKERNEL=$T/build/tools/AnyKernel
+ANYKERNEL=$T/build/tools/AnyKernel2
 
-# Add Koush's AnyKernel repo as a subtree to prevent metadata generation and uncommited changes
+# Add our AnyKernel repo as a subtree to prevent metadata generation and uncommited changes
 if [ ! -d "$ANYKERNEL" ]; then
     cd $T/build
     echo "AnyKernel tool not detected... cloning into a subtree"
-    echo -e `git subtree add --prefix tools/AnyKernel https://github.com/koush/AnyKernel.git master --squash`
+    echo -e `git subtree add --prefix tools/AnyKernel2 https://github.com/TeamExodus/AnyKernel2.git EXODUS-5.1 --squash`
 else
     echo ""
 fi
@@ -51,7 +57,7 @@ cd $T/$TARGET_KERNEL_SOURCE
 
 echo ""
 echo -e $CL_RST"Cleaning up..."
-make clean; sleep 3; make distclean; sleep 3;
+make clean && make mrproper; sleep 3; make distclean; sleep 3;
 rm -rfv .config; rm -rfv .config.old
 
 echo ""
@@ -76,9 +82,9 @@ zipfile="${DEVICE}_kernel_$DATE.zip"
 if [ ! $5 ]; then
     rm -f /tmp/*.img
     echo -e $CL_RST"making zip file"
-    cp -vr arch/arm/boot/zImage $T/build/tools/AnyKernel/
+    cp -vr arch/arm/boot/zImage $T/build/tools/AnyKernel2/
     find . -name \*.ko -exec cp '{}' AnyKernel/system/lib/modules/ ';'
-    cd build/tools/AnyKernel
+    cd build/tools/AnyKernel2
             rm -f *.zip
             zip -r $zipfile *
             rm -f /tmp/*.zip
