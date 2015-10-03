@@ -1,0 +1,5 @@
+subject='/C=US/ST=Alaska/L=Seward Peninsula/O=Exodus-Developers/OU=Exodus-Developers/CN=Exodus/emailAddress=rom@exodus-developers.net'
+for x in testkey releasekey platform shared media; do 
+rm build/target/product/security/$x.*
+./development/tools/make_key build/target/product/security/$x "$subject";
+done;

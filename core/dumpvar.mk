@@ -88,5 +88,6 @@ ifeq ($(CYNGN_TARGET),true)
 $(info   CYNGN_TARGET=$(CYNGN_TARGET))
 $(info   CYNGN_FEATURES=$(CYNGN_FEATURES))
 endif
+$(info   SIGNING_KEY=$(PRODUCT_KEY_NAME))
 $(info ============================================)
 endif

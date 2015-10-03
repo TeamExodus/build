@@ -27,7 +27,7 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   -k (--package_key) <key> Key to use to sign the package (default is
       the value of default_system_dev_certificate from the input
       target-files's META/misc_info.txt, or
-      "build/target/product/security/testkey" if that value is not
+      "build/target/product/security/$(PRODUCT_KEY_NAME)" if that value is not
       specified).
 
       For incremental OTAs, the default value is based on the source
@@ -1721,7 +1721,7 @@ def main(argv):
       if OPTIONS.package_key is None:
         OPTIONS.package_key = OPTIONS.info_dict.get(
             "default_system_dev_certificate",
-            "build/target/product/security/testkey")
+            "build/target/product/security/$(PRODUCT_KEY_NAME)")
       common.ZipClose(output_zip)
       break
 
@@ -1737,7 +1737,7 @@ def main(argv):
       if OPTIONS.package_key is None:
         OPTIONS.package_key = OPTIONS.source_info_dict.get(
             "default_system_dev_certificate",
-            "build/target/product/security/testkey")
+            "build/target/product/security/$(PRODUCT_KEY_NAME)")
       if OPTIONS.verbose:
         print "--- source info ---"
         common.DumpInfoDict(OPTIONS.source_info_dict)

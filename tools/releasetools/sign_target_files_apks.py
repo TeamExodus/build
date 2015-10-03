@@ -366,7 +366,7 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
     print "for OTA package verification"
   else:
     devkey = misc_info.get("default_system_dev_certificate",
-                           "build/target/product/security/testkey")
+                           "build/target/product/security/$(PRODUCT_KEY_NAME)")
     mapped_keys.append(
         OPTIONS.key_map.get(devkey, devkey) + ".x509.pem")
     print "META/otakeys.txt has no keys; using", mapped_keys[0]
@@ -419,7 +419,7 @@ def BuildKeyMap(misc_info, key_mapping_options):
   for s, d in key_mapping_options:
     if s is None:   # -d option
       devkey = misc_info.get("default_system_dev_certificate",
-                             "build/target/product/security/testkey")
+                             "build/target/product/security/$(PRODUCT_KEY_NAME)")
       devkeydir = os.path.dirname(devkey)
 
       OPTIONS.key_map.update({
