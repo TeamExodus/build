@@ -39,7 +39,7 @@ except ImportError:
 # set this to the default remote to use in repo
 github_remote = "roomservice"
 # set this to the default revision to use (branch/tag name)
-default_rev = "EXODUS-6.0"
+default_rev = "EXODUS-6.0-new"
 # set this to the remote that you use for projects from your team repos
 # example fetch="https://github.com/TeamExodus"
 device_github = "Exodus-Devices"
