@@ -113,9 +113,18 @@ def iterate_manifests():
 
 
 def check_project_exists(url, revision, path):
-    for project in iterate_manifests():
-        if project.get("name") == url and project.get("revision") == revision and project.get("path") == path:
-            return True
+    projects = iterate_manifests()
+    for project in projects:
+        if project.get("path") == path:
+            if project.get("name") == url and project.get("revision") == revision and project.get("path") == path:
+                return True
+            else:
+                print("")
+                print("****")
+                print("**** %s is already in Roomservice but with different remote / revision" %path)
+                print("**** please check your dependency file on this or other devices, something smells fishy")
+                print("****")
+                sys.exit(255)
     return False
 
 
@@ -145,9 +154,8 @@ def create_manifest_project(url, directory,
                             revision=default_rev):
     project_exists = check_project_exists(url, revision, directory)
 
-    if project_exists:
+    if project_exists is True:
         return None
-
     project = ES.Element("project",
                          attrib={
                              "path": directory,
@@ -208,9 +216,9 @@ def parse_device_from_folder(device):
 def parse_dependency_file(location):
     dep_file = "exodus.dependencies"
     dep_location = '/'.join([location, dep_file])
+    print("Checking dependencies in %s." %location)
     if not os.path.isfile(dep_location):
-        print("WARNING: %s file not found" % dep_location)
-        sys.exit()
+        return None
     try:
         with open(dep_location, 'r') as f:
             dependencies = json.loads(f.read())
@@ -242,6 +250,12 @@ def create_dependency_manifest(dependencies):
             projects.append(target_path)
     if len(projects) > 0:
         os.system("repo sync -f --no-clone-bundle %s" % " ".join(projects))
+    
+    for dependency in dependencies:
+        target_path = dependency.get("target_path")
+        subdeps = parse_dependency_file(target_path)
+        if not subdeps is None:
+           create_dependency_manifest(subdeps)
 
 
 def fetch_dependencies(device):
@@ -250,6 +264,9 @@ def fetch_dependencies(device):
         raise Exception("ERROR: could not find your device "
                         "folder location, bailing out")
     dependencies = parse_dependency_file(location)
+    if dependencies is None:
+        print("WARNING: %s file not found" % dep_location)
+        sys.exit();
     create_dependency_manifest(dependencies)
 
 
