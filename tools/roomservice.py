@@ -48,7 +48,7 @@ local_manifest_dir = ".repo/local_manifests"
 # change this to your name on github (or equivalent hosting)
 android_team = "TeamExodus"
 # url to gerrit repository
-gerrit_url = "exodus-developers.net:8000"
+gerrit_url = "review.exodus-developers.net"
 
 
 def check_repo_exists(git_data, device):
