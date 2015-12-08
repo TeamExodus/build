@@ -1,0 +1,48 @@
+#!/bin/bash
+if [ -z $ANDROID_BUILD_TOP ]; then
+    echo "Build environment not initialized, can't find top"
+	echo "please run source build/envsetup.sh before you try to merge"
+	echo "or run this script with source {path}/mergeaosp {branch}"
+	return 255
+fi
+export mergecommmandfolder="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+mergefolderlist=$1
+if [ -z $mergefolderlist ] ; then
+    echo "argument missing: file with list of repos"
+    return 255
+fi
+if [ ! -e ~/aosp_pushed ] ; then
+	echo 'start pushing'
+else
+    lastfile=$(head -n 1 ~/aosp_pushed)
+	if [ $lastfile != $mergefolderlist ]; then
+	    echo "mergefolderlist isn't the same as the one you started with !"
+		echo "aborting !"
+		return 255
+    fi
+	echo 'continue pushing'
+fi
+if [ ! -e $mergefolderlist ] ; then
+    echo "file not found: $mergefolderlist"
+    return 255
+fi
+if [ ! -e ~/aosp_pushed ] ; then
+	echo $mergefolderlist >~/aosp_pushed
+fi
+IFS=$'\n'
+for dir in $(cat $mergefolderlist)
+do
+    OIFS="$IFS"
+    IFS=';'
+    read -a parts <<< "${dir}"
+    IFS="$OIFS"
+	if ! grep -q $dir ~/aosp_pushed ; then
+		echo ${dir} >>~/aosp_pushed
+        source $mergecommmandfolder/pushaospfolder $ANDROID_BUILD_TOP/${parts[0]} ${parts[1]}
+		if [ $? -ne 0 ] ; then
+			return 255
+		fi
+	fi
+done
+echo "pushes completed successfully !"
+rm ~/aosp_pushed

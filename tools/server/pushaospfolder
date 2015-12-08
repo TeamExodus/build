@@ -1,0 +1,28 @@
+#!/bin/bash
+localpath=$1
+exodusrepo=$2
+if [ -z $exodusrepo ] ; then
+    echo "argument missing: exodus repo"
+    return 255
+fi
+echo "pushing $exodusrepo"
+ACWD=$(pwd)
+cd cd $localpath
+teprefix="TeamExodus/"
+deprefix="Exodus-Devices/"
+if [[ $exodusrepo == *$teprefix* ]]; then
+  exodusrepo=${exodusrepo#$teprefix}
+fi
+if [[ $exodusrepo == *$deprefix* ]]; then
+  exodusrepo="devices/${exodusrepo#$deprefix}"
+fi
+if [ ! -d $exodusrepo ] ; then
+  echo "repo not found: $exodusrepo"
+  return 255
+fi
+git push ssh://$GERRIT_USER@review.exodus-developers.net:29418/$exodusrepo HEAD:EXODUS-6.0
+if [ $? -ne 0 ] ; then
+    export mergefailfolder=$(pwd)
+	return 255
+fi
+cd ${ACWD}

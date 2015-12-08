@@ -1,0 +1,51 @@
+if [ ! -d ~/mergebot/aosp_repos ] ; then
+    mkdir ~/mergebot/aosp_repos
+fi
+localpath=$1
+exodusrepo=$2
+aosprepo=$3
+aospbranch=$4
+if [ -z $localpath ] ; then
+    echo "argument missing: localpath"
+	return 255
+fi
+if [ -z $exodusrepo ] ; then
+    echo "argument missing: exodus repo"
+    return 255
+fi
+if [ -z $aosprepo ] ; then
+    echo "argument missing: aosp repo to merge"
+    return 255
+fi
+if [ -z $aospbranch ] ; then
+    echo "argument missing: aosp branch to merge"
+    return 255
+fi
+if [ ! -d $localpath ] ; then
+    echo "localpath not existing"
+fi
+ACWD=$(pwd)
+teprefix="TeamExodus/"
+deprefix="Exodus-Devices/"
+if [[ $exodusrepo == *$teprefix* ]]; then
+  exodusrepo=${exodusrepo#$teprefix}
+fi
+if [[ $exodusrepo == *$deprefix* ]]; then
+  exodusrepo="devices/${exodusrepo#$deprefix}"
+fi
+cd $localpath
+git remote add aospmerge https://android.googlesource.com/$aosprepo >//dev/null 2>&1
+echo "merging $aosprepo"
+git fetch aospmerge refs/tags/$aospbranch
+if [ $? -ne 0 ] ; then
+    export mergefailfolder=$(pwd)
+	echo "fetch failed for $aospbranch on https://android.googlesource.com/$aosprepo"
+	return 255
+fi
+git merge FETCH_HEAD --no-edit
+if [ $? -ne 0 ] ; then
+    export mergefailfolder=$(pwd)
+	git status
+	return 255
+fi
+cd ${ACWD}
