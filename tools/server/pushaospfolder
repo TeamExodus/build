@@ -5,9 +5,12 @@ if [ -z $exodusrepo ] ; then
     echo "argument missing: exodus repo"
     return 255
 fi
-echo "pushing $exodusrepo"
 ACWD=$(pwd)
-cd cd $localpath
+if [ ! -d $localpath ] ; then
+  echo "repo not found: $localpath"
+  return 255
+fi
+cd $localpath
 teprefix="TeamExodus/"
 deprefix="Exodus-Devices/"
 if [[ $exodusrepo == *$teprefix* ]]; then
@@ -16,10 +19,7 @@ fi
 if [[ $exodusrepo == *$deprefix* ]]; then
   exodusrepo="devices/${exodusrepo#$deprefix}"
 fi
-if [ ! -d $exodusrepo ] ; then
-  echo "repo not found: $exodusrepo"
-  return 255
-fi
+echo "pushing $exodusrepo"
 git push ssh://$GERRIT_USER@review.exodus-developers.net:29418/$exodusrepo HEAD:EXODUS-6.0
 if [ $? -ne 0 ] ; then
     export mergefailfolder=$(pwd)
