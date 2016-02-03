@@ -20,7 +20,7 @@ if [[ $exodusrepo == *$deprefix* ]]; then
   exodusrepo="devices/${exodusrepo#$deprefix}"
 fi
 echo "pushing $exodusrepo"
-git push ssh://$GERRIT_USER@review.exodus-developers.net:29418/$exodusrepo HEAD:EXODUS-6.0
+git push ssh://$GERRIT_USER@review.exodus-developers.net:29418/platform/$exodusrepo HEAD:EXODUS-6.0
 if [ $? -ne 0 ] ; then
     export mergefailfolder=$(pwd)
 	return 255
