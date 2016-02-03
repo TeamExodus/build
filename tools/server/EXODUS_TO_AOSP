@@ -83,12 +83,10 @@ packages/apps/Dialer;TeamExodus/packages_apps_Dialer;platform/packages/apps/Dial
 packages/apps/Email;TeamExodus/packages_apps_Email;platform/packages/apps/Email
 packages/apps/Exchange;TeamExodus/packages_apps_Exchange;platform/packages/apps/Exchange
 packages/apps/FMRadio;TeamExodus/packages_apps_FMRadio;platform/packages/apps/FMRadio
-packages/apps/Gallery2;TeamExodus/packages_apps_Gallery2;platform/packages/apps/Gallery2
 packages/apps/HTMLViewer;TeamExodus/packages_apps_HTMLViewer;platform/packages/apps/HTMLViewer
 packages/apps/InCallUI;TeamExodus/packages_apps_InCallUI;platform/packages/apps/InCallUI
 packages/apps/KeyChain;TeamExodus/packages_apps_KeyChain;platform/packages/apps/KeyChain
 packages/apps/ManagedProvisioning;TeamExodus/packages_apps_ManagedProvisioning;platform/packages/apps/ManagedProvisioning
-packages/apps/Messaging;TeamExodus/packages_apps_Messaging;platform/packages/apps/Messaging
 packages/apps/Nfc;TeamExodus/packages_apps_Nfc;platform/packages/apps/Nfc
 packages/apps/PackageInstaller;TeamExodus/packages_apps_PackageInstaller;platform/packages/apps/PackageInstaller
 packages/apps/PhoneCommon;TeamExodus/packages_apps_PhoneCommon;platform/packages/apps/PhoneCommon
