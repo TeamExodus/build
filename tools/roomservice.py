@@ -42,7 +42,7 @@ github_remote = "roomservice"
 default_rev = "EXODUS-6.0"
 # set this to the remote that you use for projects from your team repos
 # example fetch="https://github.com/TeamExodus"
-device_github = "Exodus-Devices"
+device_github = "TeamExodus"
 # this shouldn't change unless google makes changes
 local_manifest_dir = ".repo/local_manifests"
 # change this to your name on github (or equivalent hosting)
@@ -52,7 +52,7 @@ gerrit_url = "review.exodus-developers.net"
 
 
 def check_repo_exists(git_data, device):
-    re_match = "^devices/.*_{device}$".format(device=device)
+    re_match = "^TeamExodus/device_.*_{device}$".format(device=device)
     matches = filter(lambda x: re.match(re_match, x), git_data)
     if len(matches) != 1:
         raise Exception("{device} not found,"
@@ -82,7 +82,7 @@ def search_gerrit_for_device(device):
 
 
 def parse_device_directory(device_url, device):
-    pattern = "^(?P<vendor>.+)_{}$".format(device)
+    pattern = "^device_(?P<vendor>.+)_{}$".format(device)
     match = re.match(pattern, device_url)
 
     if match is None:
@@ -191,7 +191,7 @@ def write_to_manifest(manifest):
 def parse_device_from_manifest(device):
     for project in iterate_manifests():
         name = project.get('name')
-        if name.startswith("Exodus-Devices/") and name.endswith(device):
+        if name.startswith("TeamExodus/") and name.endswith(device):
             return project.get('path')
     return None
 
@@ -282,9 +282,12 @@ def fetch_device(device):
         print("WARNING: Trying to fetch a device that's already there")
         return
     git_data = search_gerrit_for_device(device)
-    device_url = git_data['id'].replace("devices%2F","")
+    device_url = git_data['id'].replace("TeamExodus%2F","")
+    print ("device_url: %s" % device_url)
     device_dir = parse_device_directory(device_url, device)
+    print ("device_dir: %s" % device_dir)
     github_url = ("%s/%s" % (device_github,device_url))
+    print ("github_url: %s" % github_url)    
     project = create_manifest_project(github_url,
                                       device_dir,
                                       remote=github_remote)
