@@ -6,6 +6,7 @@ ifneq (,$(filter cortex-a53,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 else
 	arch_variant_cflags :=
 endif
+endif
 
 ifneq (,$(filter cortex-a53 default,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 	arch_variant_cflags  += -mfix-cortex-a53-835769
