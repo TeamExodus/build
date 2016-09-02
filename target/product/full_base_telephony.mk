@@ -20,7 +20,8 @@
 # entirely appropriate to inherit from for on-device configurations.
 
 PRODUCT_PROPERTY_OVERRIDES := \
-    keyguard.no_require_sim=true
+    keyguard.no_require_sim=true \
+    ro.com.android.dataroaming=true
 
 ifneq ($(TARGET_SUPPORTS_WEARABLES), true)
 PRODUCT_COPY_FILES := \
