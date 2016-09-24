@@ -259,6 +259,18 @@ ifeq ($(SDCLANG),true)
     endif
 endif
 
+ifeq ($(my_sdclang),true)
+ifneq ($(HOST_OS),linux)
+$(warning ****************************************************************)
+$(warning * SDCLANG is not supported on non-linux hosts. Disabling...)
+$(warning ****************************************************************)
+my_sdclang := false
+ifeq ($(SDCLANG_FORCED),true)
+$(error $(LOCAL_PATH): SDCLANG_FORCED was triggered! You are not allowed to build without SDCLANG while it is enabled... Dying...)
+endif
+endif
+endif
+
 # arch-specific static libraries go first so that generic ones can depend on them
 my_static_libraries := $(LOCAL_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_static_libraries)
 my_whole_static_libraries := $(LOCAL_WHOLE_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_WHOLE_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_whole_static_libraries)
@@ -337,25 +349,15 @@ my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_LD
     ifeq ($(my_sdclang),true)
         SDCLANG_PRECONFIGURED_FLAGS := -Wno-vectorizer-no-neon
 
-        ifeq ($(LOCAL_SDCLANG_LTO), true)
-            ifneq ($(LOCAL_MODULE_CLASS), STATIC_LIBRARIES)
-                SDCLANG_PRECONFIGURED_FLAGS += -fuse-ld=qcld -flto
-            endif
-        endif
-
-        # Bundle our setup and add it to cflags
         my_target_global_cflags += $(SDCLANG_COMMON_FLAGS) $(SDCLANG_PRECONFIGURED_FLAGS)
-
-        # Pass all cflags and module specific LTO flags to linker
-        my_target_global_ldflags += $(my_target_global_cflags) $(LOCAL_SDCLANG_LTO_LDFLAGS)
-
-        SDCLANG_PRECONFIGURED_FLAGS :=
+        my_target_global_conlyflags += $(SDCLANG_COMMON_FLAGS) $(SDCLANG_PRECONFIGURED_FLAGS)
+        my_target_global_cppflags += $(SDCLANG_COMMON_FLAGS) $(SDCLANG_PRECONFIGURED_FLAGS)
 
         ifeq ($(strip $(my_cc)),)
-            my_cc := $(my_cc_wrapper) $(SDCLANG_PATH)/clang
+            my_cc := $(SDCLANG_PATH)/clang
         endif
         ifeq ($(strip $(my_cxx)),)
-            my_cxx := $(my_cxx_wrapper) $(SDCLANG_PATH)/clang++
+            my_cxx := $(SDCLANG_PATH)/clang++
         endif
     endif
 else
