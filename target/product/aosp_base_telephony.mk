@@ -22,4 +22,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     telephony-ext
     messaging \
-    Stk
+    Stk \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
