@@ -609,7 +609,7 @@ bootimage-nodeps: $(MKBOOTIMG)
 	@echo "Made boot image: $@"
 
   endif # PRODUCT_SUPPORTS_VBOOT
-endif # PRODUCT_SUPPORTS_BOOT_SIGNER / BOARD_CUSTOM_BOOTIMG_MK
+endif # TARGET_BOOTIMAGE_USE_EXT2 != true / BOARD_CUSTOM_BOOTIMG_MK
 endif # BOARD_USES_RECOVERY_AS_BOOT
 
 else	# TARGET_NO_KERNEL
@@ -1072,7 +1072,6 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 		$(recovery_fstab) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
 		$(call build-recoveryimage-target, $@)
-
 endif # BOARD_CUSTOM_BOOTIMG_MK
 
 ifdef RECOVERY_RESOURCE_ZIP
@@ -1852,7 +1851,6 @@ endif
 ifdef BOARD_TAGS_OFFSET
 	$(hide) echo "$(BOARD_TAGS_OFFSET)" > $(zip_root)/BOOT/tags_offset
 endif
-
 ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
 	$(hide) echo "$(INSTALLED_DTIMAGE_TARGET)" > $(zip_root)/BOOT/dt_args
 endif
@@ -2049,11 +2047,7 @@ EXODUS_TARGET_PACKAGE := $(PRODUCT_OUT)/$(TARGET_PRODUCT)-$(ROM_VERSION).zip
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	$(hide) \
-	$(TARGET_CUSTOM_RELEASETOOL)
-endif
-
+	$(hide) $(MD5SUM) $(EXODUS_TARGET_PACKAGE) > $(EXODUS_TARGET_PACKAGE).md5sum
 	@echo "Package Complete: $(EXODUS_TARGET_PACKAGE)"
 
 endif    # build_ota_package
