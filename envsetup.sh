@@ -581,7 +581,7 @@ function breakfast()
             if [ -z "$variant" ]; then
                 variant="userdebug"
             fi
-            lunch pa_$target-$variant
+            lunch exodus_$target-$variant
         fi
     fi
     return $?
@@ -627,7 +627,7 @@ function lunch()
     export TARGET_BUILD_APPS=
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
-    if [[ $product == pa_* ]]
+    if [[ $product == exodus_* ]]
     then
         pushd $(gettop) > /dev/null
         build/tools/roomservice.py $product

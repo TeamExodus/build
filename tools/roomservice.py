@@ -27,7 +27,24 @@ extra_manifests_dir = '.repo/manifests/'
 upstream_manifest_path = '.repo/manifest.xml'
 local_manifests_dir = '.repo/local_manifests'
 roomservice_manifest_path = local_manifests_dir + '/roomservice.xml'
-dependencies_json_path = 'vendor/pa/products/%s/pa.dependencies'
+dependencies_json_path = '%s'
+
+
+def parse_device_from_folder(device):
+    search = []
+    for sub_folder in os.listdir("device"):
+        if os.path.isdir("device/%s/%s" % (sub_folder, device)):
+            search.append("device/%s/%s" % (sub_folder, device))
+    if len(search) > 1:
+        print("multiple devices under the name %s. "
+              "defaulting to checking the manifest" % device)
+        location = parse_device_from_manifest(device)
+    elif len(search) == 1:
+        location = search[0]
+    else:
+        print("Your device can't be found in device sources..")
+        location = parse_device_from_manifest(device)
+    return location
 
 # Indenting code from https://stackoverflow.com/a/4590052
 def indent(elem, level=0):
@@ -58,9 +75,9 @@ if __name__ == '__main__':
     except ValueError:
         device = product
 
-    dependencies_json_path %= device
+    dependencies_json_path %= parse_device_from_folder(device).__add__('/exodus.dependencies')
     if not os.path.isfile(dependencies_json_path):
-        raise ValueError('No dependencies file could be found for the device (%s).' % device)
+        raise ValueError('No dependencies file could be found for the device (%s).' % dependencies_json_path)
     dependencies = json.loads(open(dependencies_json_path, 'r').read())
 
     try:
@@ -126,7 +143,8 @@ if __name__ == '__main__':
                 found_remote = True
                 break
         if not found_remote:
-            raise ValueError('No remote declaration could be found for the %s project. (%s)' % (name, remote))
+            print('No remote declaration could be found for the %s project. (%s)' % (name, remote))
+            continue
 
         modified_project = False
         found_in_roomservice = False
