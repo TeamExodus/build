@@ -37,7 +37,6 @@ PRODUCT_PACKAGES += \
     dpm \
     framework \
     fsck_msdos \
-    hid \
     ime \
     input \
     javax.obex \
