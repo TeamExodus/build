@@ -19,6 +19,13 @@
 # build quite specifically for the emulator, and might not be
 # entirely appropriate to inherit from for on-device configurations.
 
+PRODUCT_PACKAGES += \
+    Stk \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
+
 PRODUCT_PROPERTY_OVERRIDES := \
     keyguard.no_require_sim=true \
     ro.com.android.dataroaming=true
