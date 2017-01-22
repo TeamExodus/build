@@ -33,7 +33,6 @@ PRODUCT_PACKAGES := \
 	libWnnEngDic \
 	libWnnJpnDic \
 	LiveWallpapersPicker \
-	Mms \
 	Music \
 	OpenWnn \
 	Protips \
