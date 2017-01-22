@@ -145,7 +145,6 @@ if __name__ == '__main__':
         if not found_remote:
             print('No remote declaration could be found for the %s project. (%s)' % (name, remote))
             continue
-
         modified_project = False
         found_in_roomservice = False
 
