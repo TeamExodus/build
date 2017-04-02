@@ -1972,8 +1972,8 @@ endif
 	@# Zip everything up, preserving symlinks and placing META/ files first to
 	@# help early validation of the .zip file while uploading it.
 	$(hide) (cd $(zip_root) && \
-	        zip -qryX ../$(notdir $@) ./META && \
-	        zip -qryXu ../$(notdir $@) .)
+	        zip -0qryX ../$(notdir $@) ./META && \
+	        zip -0qryXu ../$(notdir $@) .)
 	@# Run fs_config on all the system, vendor, boot ramdisk,
 	@# and recovery ramdisk files in the zip, and save the output
 	$(hide) zipinfo -1 $@ | awk 'BEGIN { FS="SYSTEM/" } /^SYSTEM\// {print "system/" $$2}' | $(HOST_OUT_EXECUTABLES)/fs_config -C -D $(TARGET_OUT) -S $(SELINUX_FC) > $(zip_root)/META/filesystem_config.txt
@@ -2018,6 +2018,13 @@ else
     $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_OTA_ASSERT_DEVICE)
 endif
 
+# Assume non-release recoveries to skip signature check
+ifeq ($(TARGET_BUILD_VARIANT),user)
+    sign_arg := -k $(KEY_CERT_PAIR)
+else
+    sign_arg := --no_signing
+endif
+
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	@echo "Package OTA: $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
@@ -2025,7 +2032,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	   --block \
 	   --no_prereq \
 	   -p $(HOST_OUT) \
-	   -k $(KEY_CERT_PAIR) \
+	   $(sign_arg) \
 	   --override_device=$(override_device) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
